@@ -107,7 +107,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			msg += "Atualmente estou desativado.\n";
 			msg += "Entre em contato com algum admin para mais info.";
 		} else {
-			msg += "Comandos disponiveis: \n";
+			msg += "Comandos dispon\303\255veis: \n";
 			msg += "!youtube link - Coloca o link na playlist\n";
 			msg += "!atual - Mostra a m\303\272sica atual\n";
 			msg += "!ajuda - Mostra essa mensagem novamente";
@@ -140,7 +140,7 @@ void MusicBot::onClientMove(anyID clientID, uint64 toChannel){
 		msg += "Atualmente estou desativado.\n";
 		msg += "Entre em contato com algum admin para mais info.";
 	} else {
-		msg += "Comandos disponiveis: \n";
+		msg += "Comandos dispon\303\255veis: \n";
 		msg += "!youtube link - Coloca o link na playlist\n";
 		msg += "!atual - Mostra a m\303\272sica atual\n";
 		msg += "!ajuda - Mostra essa mensagem novamente";
