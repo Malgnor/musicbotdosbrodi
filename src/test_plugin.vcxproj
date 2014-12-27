@@ -180,8 +180,10 @@
     <ClCompile Include="global.cpp" />
     <ClCompile Include="musicbot.cpp" />
     <ClCompile Include="plugin.cpp" />
+    <ClCompile Include="telnet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="telnet.h" />
     <CustomBuild Include="dialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing configdialog.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>

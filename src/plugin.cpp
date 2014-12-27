@@ -6,6 +6,7 @@
 
 #ifdef _WIN32
 #pragma warning (disable : 4100)  /* Disable Unreferenced parameter warning */
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #endif
 
@@ -73,7 +74,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.3";
+    return "0.4";
 }
 
 int ts3plugin_apiVersion() {
