@@ -136,6 +136,8 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			msg += "!anterior - Pula para a m\303\272sica anterior\n";
 			msg += "!pausar - Pausa/despausa m\303\272sica atual\n";
 			msg += "!play - Toca m\303\272sica atual\n";
+			msg += "!irpara xx - Vai para o momento xx segundos da m\303\272sica\n";
+			msg += "!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n";
 			msg += "!ajuda - Mostra essa mensagem novamente\n";
 		}
 		if (ts3Functions.requestSendPrivateTextMsg(schID, msg.c_str(), fromID, NULL) != ERROR_ok){
@@ -157,11 +159,11 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 					Sleep(100);
 					resposta = "";
 					if (telnet.receber(resposta, 2048) > 0){
-						int l = resposta.find("\n");
+						int l = (int)resposta.find("\n");
 						string b = resposta;
 						if (resposta.length() - l > 1 && l != -1){
 							while (true){
-								int k = resposta.find("\n", l + 1);
+								int k = (int)resposta.find("\n", l + 1);
 								if (k == -1 || resposta.length() - k == 1){
 									break;
 								}
@@ -196,11 +198,11 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			Sleep(100);
 			string resposta = "";
 			if (telnet.receber(resposta, 2048) > 0){
-				int l = resposta.find("\n");
+				int l = (int)resposta.find("\n");
 				string b = resposta;
 				if (resposta.length() - l > 1 && l != -1){
 					while (true){
-						int k = resposta.find("\n", l + 1);
+						int k = (int)resposta.find("\n", l + 1);
 						if (k == -1 || resposta.length() - k == 1){
 							break;
 						}
@@ -315,6 +317,62 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 			return 0;
 		}
+	} else if (message.find("!irpara") != -1){
+		if (!telnet.estaConectado()){
+			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+			return 0;
+		}
+		if (message.length() <= 9){
+			if (ts3Functions.requestSendChannelTextMsg(schID, "Faltou par\303\242metro!", myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+			return 0;
+		}
+
+		string param = message;
+		param.erase(0, 8);
+		string msg = "seek ";
+		int a;
+		if ( (a = (int)param.find(":")) != -1){
+			string s = param.substr(a + 1);
+			string m = "0";
+			int t = (int)(param.length() - s.length() - 1);
+			if (t > 0)
+				m = param.substr(0, t);
+			try{
+				int total = stoi(m) * 60 + stoi(s);
+				stringstream b;
+				b << total;
+				msg += b.str();
+				if (ts3Functions.requestSendChannelTextMsg(schID, msg.c_str(), myChannelID, NULL) != ERROR_ok){
+					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+				}
+				if (ts3Functions.requestSendChannelTextMsg(schID, m.c_str(), myChannelID, NULL) != ERROR_ok){
+					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+				}
+				if (ts3Functions.requestSendChannelTextMsg(schID, s.c_str(), myChannelID, NULL) != ERROR_ok){
+					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+				}
+			} catch(exception e) {
+			}
+		} else {
+			msg += param;
+		}
+		msg += "\r\n";
+		if (telnet.enviar(msg) > 0){
+			Sleep(100);
+			string resposta = "";
+			if (telnet.receber(resposta, 2048) > 0){
+				return 0;
+			}
+		} else {
+			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+			return 0;
+		}
 	}
 
 	return 0;
@@ -342,6 +400,8 @@ void MusicBot::onClientMove(anyID clientID, uint64 toChannel){
 		msg += "!anterior - Pula para a m\303\272sica anterior\n";
 		msg += "!pausar - Pausa/despausa m\303\272sica atual\n";
 		msg += "!play - Toca m\303\272sica atual\n";
+		msg += "!irpara xx - Vai para o momento xx segundos da m\303\272sica\n";
+		msg += "!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n";
 		msg += "!ajuda - Mostra essa mensagem novamente\n";
 	}
 
