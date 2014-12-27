@@ -15,14 +15,15 @@ private:
 	bool enabled;
 	std::string vlcPath;
 	anyID myID;
-	uint64 myChannel;
+	uint64 myChannelID;
 	uint64 schID;
 
+public:
 	MusicBot();
 
 	int processCommand(std::string command);
 	int onTextMessage(anyID fromID, std::string message);
-	void onClientMove(anyID clientID, uint64 toChannel, std::string moveMessage);
+	void onClientMove(anyID clientID, uint64 toChannel);
 
 	void setVlcPath(std::string path);
 	std::string getVlcPath();
@@ -31,6 +32,9 @@ private:
 	uint64 getChannelID();
 
 	void setSchID(uint64 sID);
+
+	anyID getMyID();
+	bool setMyID();
 
 	bool enable();
 	bool disable();

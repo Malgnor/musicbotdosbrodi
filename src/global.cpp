@@ -20,6 +20,7 @@ namespace Global
 	void loadSettings(){
 		QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
 		musicbot.setVlcPath(cfg.value("vlcPath", "\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"").toString().toStdString());
+		musicbot.setChannelID(cfg.value("channelId", 0).toInt());
 	}
 
 }
