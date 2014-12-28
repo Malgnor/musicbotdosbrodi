@@ -70,13 +70,6 @@ int MusicBot::processCommand(string command){
 			}
 		}
 		return 0;
-	} else if (command == "lang"){
-		curLanguage = (++curLanguage) % 2;
-		stringstream a;
-		a << "curLanguage: " << curLanguage;
-		if (ts3Functions.requestSendChannelTextMsg(schID, a.str().c_str(), myChannelID, NULL) != ERROR_ok){
-			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-		}
 	}
 
 	return 0;
@@ -88,7 +81,6 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			return 0;
 	}
 
-	if (!enabled) return 0;
 
 	uint64 fromChannelID;
 
@@ -99,6 +91,22 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 
 	if (myID == fromID || fromChannelID != myChannelID || message[0] != '!')
 		return 0;
+	
+	if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1){
+		if (!enabled){
+			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_DISABLED.c_str(), fromID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+		} else {
+			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_ENABLED.c_str(), fromID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+		}
+
+		return 0;
+	}
+
+	if (!enabled) return 0;
 
 	if (message.find(languages[curLanguage].USER_COMMAND_YOUTUBE) != -1){
 		if (message.length() <= languages[curLanguage].USER_COMMAND_YOUTUBE.length()+2){
@@ -139,18 +147,6 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 			return 0;
 		}
-	} else if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1){
-		if (!enabled){
-			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_DISABLED.c_str(), fromID, NULL) != ERROR_ok){
-				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-			}
-		} else {
-			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_ENABLED.c_str(), fromID, NULL) != ERROR_ok){
-				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-			}
-		}
-		
-		return 0;
 	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAYING) != -1){
 		if (!telnet.estaConectado()){
 			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){

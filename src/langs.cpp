@@ -49,7 +49,7 @@ void generatePTBRStrings(){
 												!play - Toca m\303\272sica atual\n\
 												!irpara xx - Vai para o momento xx segundos da m\303\272sica\n\
 												!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n\
-												!ajuda - Mostra essa mensagem novamente\n";
+												!ajuda - Mostra essa mensagem\n";
 	languages[LANG_PT_BR].BOT_HELP_WHEN_DISABLED = "Bem-Vindo ao meu canal de m\303\272sica!\n\
 												   Atualmente estou desativado.\n\
 												   Entre em contato com algum admin para mais info.";
@@ -120,7 +120,7 @@ void generateENUSStrings(){
 												!play - play the current song\n\
 												!goto xx - go to the moment xx seconds of what\'s currently playing\n\
 												!goto x:y - go to the moment x minutes and y seconds of what\'s currently playing\n\
-												!help - Mostra essa mensagem novamente\n";
+												!help - show this message\n";
 	languages[LANG_EN_US].BOT_HELP_WHEN_DISABLED = "Welcome to my music channel!\n\
 												   Currently i\'m not active.\n";
 	languages[LANG_EN_US].BOT_TELNET_NOT_CONNECTED = "Telnet not connected!";
