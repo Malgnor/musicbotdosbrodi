@@ -14,16 +14,18 @@ SettingsDialog::SettingsDialog()
 void SettingsDialog::SetupUi(){
 
 	setupUi(this);
+	retranslateUi();
 	QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
 	le_vlcPath->setText(cfg.value("vlcPath", "\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"").toString());
 	le_rcHost->setText(cfg.value("rcHost", "127.0.0.1").toString());
 	le_rcPort->setText(cfg.value("rcPort", 32323).toString());
+	cb_language->setCurrentIndex(cfg.value("lang", LANG_EN_US).toInt());
 
 	if (musicbot.telnetIsConnected()){
-		pb_connectVlc->setText("Conectado");
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
 	}
 	if (musicbot.isEnabled())
-		pb_enableBot->setText("Desativar bot");
+		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_DEACTIVATE_BOT.c_str());
 
 	pb_selfChannel->setDisabled(true);
 	pb_connectVlc->setDisabled(true);
@@ -60,6 +62,31 @@ void SettingsDialog::SetupUi(){
 
 }
 
+void SettingsDialog::retranslateUi()
+{
+	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
+	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
+	le_vlcPath->setText("\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"");
+	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
+	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
+	cb_channelList->clear();
+	cb_channelList->insertItems(0, QStringList()
+		<< "Default Channel"
+		);
+	label_language->setText(languages[curLanguage].GUI_LABEL_LANGUAGE.c_str());
+	cb_language->clear();
+	cb_language->insertItems(0, QStringList()
+		<< "pt-BR"
+		<< "en-US"
+		);
+	label_rcHost->setText("VLC rc ip:");
+	le_rcHost->setText("127.0.0.1");
+	label_rcPort->setText(languages[curLanguage].GUI_LAVEL_RC_PORT.c_str());
+	le_rcPort->setText("32323");
+	pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECT_TO_VLC.c_str());
+	pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
+}
+
 
 void SettingsDialog::accept(){
 
@@ -67,6 +94,8 @@ void SettingsDialog::accept(){
 	cfg.setValue("vlcPath", le_vlcPath->text());
 	cfg.setValue("rcHost", le_rcHost->text());
 	cfg.setValue("rcPort", le_rcPort->text().toInt());
+	cfg.setValue("lang", cb_language->currentIndex());
+	curLanguage = cb_language->currentIndex();
 	musicbot.setVlcPath(le_vlcPath->text().toStdString());
 	musicbot.setHostPort(le_rcHost->text().toStdString(), le_rcPort->text().toInt());
 
@@ -122,11 +151,11 @@ void SettingsDialog::useSelfChannel(){
 void SettingsDialog::connectVlc(){
 	QMessageBox msgBox;
 	if (musicbot.telnetConnnect(le_rcHost->text().toStdString(), le_rcPort->text().toInt())){
-		msgBox.setText("Foi conectado com sucesso!");
-		pb_connectVlc->setText("Conectado");
+		msgBox.setText(languages[curLanguage].BOT_CONNECT_SUCESS.c_str());
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
 		pb_connectVlc->setDisabled(true);
 	} else {
-		msgBox.setText("Falha ao conectar");
+		msgBox.setText(languages[curLanguage].BOT_CONNECT_FAIL.c_str());
 	}
 	msgBox.exec();
 }
@@ -135,10 +164,10 @@ void SettingsDialog::toggleBot(){
 	QMessageBox msgBox;
 	if (musicbot.isEnabled()){
 		if (musicbot.disable()){
-			msgBox.setText("O bot foi desativado!");
-			pb_enableBot->setText("Ativar bot");
+			msgBox.setText(languages[curLanguage].BOT_DEACTIVATED_SUCESS.c_str());
+			pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
 		} else {
-			msgBox.setText("Falha ao desativar!");
+			msgBox.setText(languages[curLanguage].BOT_DEACTIVATED_FAIL.c_str());
 		}
 	} else {
 		musicbot.setVlcPath(le_vlcPath->text().toStdString());
@@ -167,13 +196,36 @@ void SettingsDialog::toggleBot(){
 			}
 		}
 		if (musicbot.enable()){
-			msgBox.setText("O bot foi ativado!");
-			pb_enableBot->setText("Desativar bot");
+			msgBox.setText(languages[curLanguage].BOT_ACTIVATED_SUCESS.c_str());
+			pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_DEACTIVATE_BOT.c_str());
 		} else {
-			msgBox.setText("Falha ao ativar");
+			msgBox.setText(languages[curLanguage].BOT_ACTIVATED_FAIL.c_str());
 		}
 	}
 	msgBox.exec();
+}
+
+void SettingsDialog::onLanguageChange(int lang){
+	curLanguage = lang;
+	translateUi();
+}
+
+void SettingsDialog::translateUi()
+{
+	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
+	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
+	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
+	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
+	label_language->setText(languages[curLanguage].GUI_LABEL_LANGUAGE.c_str());
+	label_rcPort->setText(languages[curLanguage].GUI_LAVEL_RC_PORT.c_str());
+	if (musicbot.telnetIsConnected())
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
+	else
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECT_TO_VLC.c_str());
+	if (musicbot.isEnabled())
+		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_DEACTIVATE_BOT.c_str());
+	else
+		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
 }
 
 void SettingsDialog::reject(){

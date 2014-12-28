@@ -146,7 +146,7 @@
     <item>
      <widget class="QComboBox" name="cb_language">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <item>
        <property name="text">
@@ -230,7 +230,15 @@
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_6"/>
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <item>
+     <widget class="QPushButton" name="pb_enableBot">
+      <property name="text">
+       <string>Ativar bot</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_4">
    <property name="geometry">
@@ -252,26 +260,8 @@
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_8">
-    <item>
-     <widget class="QPushButton" name="pb_enableBot">
-      <property name="text">
-       <string>Ativar bot</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QHBoxLayout" name="horizontalLayout_8"/>
   </widget>
-  <zorder>bb_okCancel</zorder>
-  <zorder>layoutWidget</zorder>
-  <zorder>layoutWidget</zorder>
-  <zorder>layoutWidget</zorder>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>label_language</zorder>
-  <zorder>horizontalLayoutWidget_2</zorder>
-  <zorder>horizontalLayoutWidget_3</zorder>
-  <zorder>horizontalLayoutWidget_4</zorder>
-  <zorder>horizontalLayoutWidget_5</zorder>
  </widget>
  <resources/>
  <connections>
@@ -308,22 +298,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>cb_channelList</sender>
-   <signal>currentIndexChanged(QString)</signal>
-   <receiver>SettingsDialog</receiver>
-   <slot>onChannelListChange(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>428</x>
-     <y>61</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>259</x>
-     <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pb_connectVlc</sender>
    <signal>clicked()</signal>
    <receiver>SettingsDialog</receiver>
@@ -346,8 +320,8 @@
    <slot>toggleBot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>260</x>
-     <y>285</y>
+     <x>261</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
      <x>259</x>
@@ -371,11 +345,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cb_language</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>onLanguageChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>386</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleBot()</slot>
   <slot>connectVlc()</slot>
   <slot>useSelfChannel()</slot>
-  <slot>onChannelListChange(QString)</slot>
+  <slot>onLanguageChange(int)</slot>
  </slots>
 </ui>

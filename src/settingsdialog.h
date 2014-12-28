@@ -11,6 +11,8 @@ class SettingsDialog : public QDialog, public Ui::SettingsDialog
 public:
 	SettingsDialog();
 	void SetupUi();
+	void retranslateUi();
+	void translateUi();
     ~SettingsDialog();
 
 protected slots:
@@ -19,6 +21,7 @@ protected slots:
 	void connectVlc();
 	void toggleBot();
 	void useSelfChannel();
+	void onLanguageChange(int lang);
 };
 
 #endif // _SETTINGSDIALOG_H

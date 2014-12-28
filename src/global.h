@@ -49,10 +49,6 @@ struct Localization {
 	std::string BOT_AND;
 	std::string BOT_ERROR;
 
-	/* OTHERS */
-
-	std::string PLUGIN_DESCRIPTION;
-
 	/* SETTINGS GUI*/
 
 	std::string GUI_WINDOWTITLE;

@@ -23,6 +23,7 @@ namespace Global
 
 	void loadSettings(){
 		QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
+		curLanguage = cfg.value("lang", LANG_EN_US).toInt();
 		musicbot.setVlcPath(cfg.value("vlcPath", "\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"").toString().toStdString());
 		std::string host = cfg.value("rcHost", "127.0.0.1").toString().toStdString();
 		int port = cfg.value("rcPort", 32323).toInt();

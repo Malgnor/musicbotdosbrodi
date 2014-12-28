@@ -26,48 +26,57 @@ int MusicBot::processCommand(string command){
 			return 0;
 	}
 
-	if (command == "ativar"){
+	if (command == languages[curLanguage].COMMAND_ACTIVATE){
 		if (enable()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "O bot agora est\303\241 ativado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ACTIVATED_SUCESS.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
 
-		if (ts3Functions.requestSendChannelTextMsg(schID, "O bot n\305\241o foi ativado!", myChannelID, NULL) != ERROR_ok){
+		if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ACTIVATED_FAIL.c_str(), myChannelID, NULL) != ERROR_ok){
 			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 		}
 		return 0;
-	} else if (command == "desativar"){
+	} else if (command == languages[curLanguage].COMMAND_DEACTIVATE){
 		if (disable()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "O bot agora est\303\241 desativado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_DEACTIVATED_SUCESS.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
 
-		if (ts3Functions.requestSendChannelTextMsg(schID, "O bot n\305\241o foi desativado!", myChannelID, NULL) != ERROR_ok){
+		if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_DEACTIVATED_FAIL.c_str(), myChannelID, NULL) != ERROR_ok){
 			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 		}
 		return 0;
-	} else if (command == "conectar"){
+	} else if (command == languages[curLanguage].COMMAND_CONNECT){
 		if (telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Ja esta conectado.", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ALREADY_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
 		bool sucesso = telnet.conectar(rcHost, rcPort);
-		string msg;
-		if (sucesso)
-			msg = "Sucesso!";
-		else
-			msg = "Falha!";
 
-		if (ts3Functions.requestSendChannelTextMsg(schID, msg.c_str(), myChannelID, NULL) != ERROR_ok){
-			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+		if (sucesso){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_CONNECT_SUCESS.c_str(), myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+		}
+		else{
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_CONNECT_FAIL.c_str(), myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
 		}
 		return 0;
+	} else if (command == "lang"){
+		curLanguage = (++curLanguage) % 2;
+		stringstream a;
+		a << "curLanguage: " << curLanguage;
+		if (ts3Functions.requestSendChannelTextMsg(schID, a.str().c_str(), myChannelID, NULL) != ERROR_ok){
+			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+		}
 	}
 
 	return 0;
@@ -91,16 +100,16 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 	if (myID == fromID || fromChannelID != myChannelID || message[0] != '!')
 		return 0;
 
-	if (message.find("!youtube") != -1){
-		if (message.length() <= 10){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Faltou par\303\242metro!", myChannelID, NULL) != ERROR_ok){
+	if (message.find(languages[curLanguage].USER_COMMAND_YOUTUBE) != -1){
+		if (message.length() <= languages[curLanguage].USER_COMMAND_YOUTUBE.length()+2){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_PARAMETER_MISSING.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
 
 		string param = message;
-		param.erase(0, 9);
+		param.erase(0, languages[curLanguage].USER_COMMAND_YOUTUBE.length()+1);
 
 		if (param.find("[URL]") != -1){
 
@@ -117,7 +126,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			system(cmd.c_str());
 
 			string atual = link;
-			atual += " foi adicionado na playlist.";
+			atual += languages[curLanguage].BOT_ADDED_TO_PLAYLIST;
 			
 			if (ts3Functions.requestSendChannelTextMsg(schID, atual.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -125,36 +134,26 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 
 			return 0;
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Par\303\242metro inv\303\241lido!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_INVALID_PARAMETER.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-	} else if (message.find("!ajuda") != -1){
-		string msg = "Bem-Vindo ao meu canal de m\303\272sica!\n";
+	} else if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1){
 		if (!enabled){
-			msg += "Atualmente estou desativado.\n";
-			msg += "Entre em contato com algum admin para mais info.";
+			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_DISABLED.c_str(), fromID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
 		} else {
-			msg += "Comandos dispon\303\255veis: \n";
-			msg += "!youtube link - Coloca o link na playlist\n";
-			msg += "!atual - Mostra a m\303\272sica atual\n";
-			msg += "!duracao - Mostra duracao da m\303\272sica atual\n";
-			msg += "!proximo - Pula para a proxima m\303\272sica\n";
-			msg += "!anterior - Pula para a m\303\272sica anterior\n";
-			msg += "!pausar - Pausa/despausa m\303\272sica atual\n";
-			msg += "!play - Toca m\303\272sica atual\n";
-			msg += "!irpara xx - Vai para o momento xx segundos da m\303\272sica\n";
-			msg += "!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n";
-			msg += "!ajuda - Mostra essa mensagem novamente\n";
+			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_ENABLED.c_str(), fromID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
 		}
-		if (ts3Functions.requestSendPrivateTextMsg(schID, msg.c_str(), fromID, NULL) != ERROR_ok){
-			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-		}
+		
 		return 0;
-	} else if (message.find("!atual") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAYING) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -186,7 +185,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 						return 0;
 
 					} else {
-						if (ts3Functions.requestSendChannelTextMsg(schID, "Tente novamente!", myChannelID, NULL) != ERROR_ok){
+						if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TRY_AGAIN.c_str(), myChannelID, NULL) != ERROR_ok){
 							ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 						}
 						return 0;
@@ -195,9 +194,9 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 		}
 		return 0;
-	} else if (message.find("!duracao") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_LENGTH) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -226,29 +225,32 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 						int m = duracao / 60;
 						stringstream d;
 						if (m > 0)
-							d << m << " minutos";
+							d << m << " " << languages[curLanguage].BOT_MINUTES;
 						if (m > 0 && s > 0)
-							d << " e ";
+							d << " " << languages[curLanguage].BOT_AND << " ";
 						if (s > 0)
-							d << (s < 10 ? "0" : "") << s << " segundos";
+							d << (s < 10 ? "0" : "") << s << " " << languages[curLanguage].BOT_SECONDS;
 						if (ts3Functions.requestSendChannelTextMsg(schID, d.str().c_str(), myChannelID, NULL) != ERROR_ok){
 							ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 						}
 						return 0;
 					} catch(exception e) {
+						if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TRY_AGAIN.c_str(), myChannelID, NULL) != ERROR_ok){
+							ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+						}
 						return 0;
 					}
 				}
 			} else {
-				if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+				if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 				}
 				return 0;
 			}
 		}
-	} else if (message.find("!proximo") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_NEXT) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -260,14 +262,14 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-	} else if (message.find("!anterior") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PREV) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -279,14 +281,14 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-	} else if (message.find("!pausar") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PAUSE) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -298,14 +300,14 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-	} else if (message.find("!play") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAY) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -317,27 +319,27 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-	} else if (message.find("!irpara") != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_GOTO) != -1){
 		if (!telnet.estaConectado()){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Telnet nao esta conectado!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
-		if (message.length() <= 9){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Faltou par\303\242metro!", myChannelID, NULL) != ERROR_ok){
+		if (message.length() <= languages[curLanguage].USER_COMMAND_GOTO.length()+2){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_PARAMETER_MISSING.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
 		}
 
 		string param = message;
-		param.erase(0, 8);
+		param.erase(0, languages[curLanguage].USER_COMMAND_GOTO.length()+1);
 		string msg = "seek ";
 		int a;
 		if ( (a = (int)param.find(":")) != -1){
@@ -364,7 +366,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		} else {
-			if (ts3Functions.requestSendChannelTextMsg(schID, "Erro!", myChannelID, NULL) != ERROR_ok){
+			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_ERROR.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 			}
 			return 0;
@@ -383,27 +385,16 @@ void MusicBot::onClientMove(anyID clientID, uint64 toChannel){
 	if (myChannelID != toChannel)
 		return;
 
-	string msg = "Bem-Vindo ao meu canal de m\303\272sica!\n";
 	if (!enabled){
-		msg += "Atualmente estou desativado.\n";
-		msg += "Entre em contato com algum admin para mais info.";
+		if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_DISABLED.c_str(), clientID, NULL) != ERROR_ok){
+			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+		}
 	} else {
-		msg += "Comandos dispon\303\255veis: \n";
-		msg += "!youtube link - Coloca o link na playlist\n";
-		msg += "!atual - Mostra a m\303\272sica atual\n";
-		msg += "!duracao - Mostra duracao da m\303\272sica atual\n";
-		msg += "!proximo - Pula para a proxima m\303\272sica\n";
-		msg += "!anterior - Pula para a m\303\272sica anterior\n";
-		msg += "!pausar - Pausa/despausa m\303\272sica atual\n";
-		msg += "!play - Toca m\303\272sica atual\n";
-		msg += "!irpara xx - Vai para o momento xx segundos da m\303\272sica\n";
-		msg += "!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n";
-		msg += "!ajuda - Mostra essa mensagem novamente\n";
+		if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_ENABLED.c_str(), clientID, NULL) != ERROR_ok){
+			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+		}
 	}
 
-	if (ts3Functions.requestSendPrivateTextMsg(schID, msg.c_str(), clientID, NULL) != ERROR_ok){
-		ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-	}
 }
 
 void MusicBot::setVlcPath(string path){
