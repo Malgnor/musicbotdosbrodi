@@ -7,9 +7,17 @@
 using namespace std;
 using namespace Global;
 
-MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(0), schID(0)
+MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323)
 {
 	telnet.inicializar();
+}
+
+bool MusicBot::telnetConnnect(string host, int port){
+	return telnet.conectar(host, port);
+}
+
+bool MusicBot::telnetIsConnected(){
+	return telnet.estaConectado();
 }
 
 int MusicBot::processCommand(string command){
@@ -49,7 +57,7 @@ int MusicBot::processCommand(string command){
 			}
 			return 0;
 		}
-		bool sucesso = telnet.conectar("127.0.0.1", 32323);
+		bool sucesso = telnet.conectar(rcHost, rcPort);
 		string msg;
 		if (sucesso)
 			msg = "Sucesso!";
@@ -59,6 +67,31 @@ int MusicBot::processCommand(string command){
 		if (ts3Functions.requestSendChannelTextMsg(schID, msg.c_str(), myChannelID, NULL) != ERROR_ok){
 			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 		}
+		return 0;
+	} else if (command == "channel"){
+		stringstream msg;
+		uint64* canais;
+		unsigned int res = ts3Functions.getChannelList(schID, &canais);
+		msg << "getChannelList retornou: " << res << endl;
+		if (res != ERROR_ok)
+			msg << "Erro" << endl;
+		int i = 0;
+		try{
+			while (canais[i]){
+				char* nome;
+				ts3Functions.getChannelVariableAsString(schID, canais[i], 0, &nome);
+				msg << canais[i] << ": " << nome << endl;
+				i++;
+			}
+			if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+		} catch (exception e){
+			if (ts3Functions.requestSendChannelTextMsg(schID, "CRASH", myChannelID, NULL) != ERROR_ok){
+				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+			}
+		}
+		
 		return 0;
 	}
 
@@ -418,6 +451,12 @@ string MusicBot::getVlcPath(){
 	return vlcPath;
 }
 
+void MusicBot::setHostPort(string host, int port)
+{
+	rcHost = host;
+	rcPort = port;
+}
+
 void MusicBot::setChannelID(uint64 cID){
 	myChannelID = cID;
 }
@@ -428,6 +467,10 @@ uint64 MusicBot::getChannelID(){
 
 void MusicBot::setSchID(uint64 sID){
 	schID = sID;
+}
+
+uint64 MusicBot::getSchID(){
+	return schID;
 }
 
 anyID MusicBot::getMyID(){
@@ -477,8 +520,12 @@ bool MusicBot::disable(){
 	return enabled == false;
 }
 
-bool MusicBot::getState(){
+bool MusicBot::isEnabled(){
 	return enabled;
+}
+
+bool MusicBot::isConnected(){
+	return (schID != 0);
 }
 
 MusicBot::~MusicBot(){}

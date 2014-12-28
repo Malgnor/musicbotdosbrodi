@@ -21,7 +21,7 @@
 #include "plugin.h"
 
 #include "global.h"
-#include "dialog.h"
+#include "settingsdialog.h"
 
 using namespace std;
 using namespace Global;
@@ -74,7 +74,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.4";
+    return "0.5";
 }
 
 int ts3plugin_apiVersion() {
@@ -96,12 +96,13 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 int ts3plugin_init() {
     printf("PLUGIN: init\n");
 
-	loadSettings();
 
 	uint64 serverConnectionHandlerID = ts3Functions.getCurrentServerConnectionHandlerID();
 	if (serverConnectionHandlerID != 0) {
 		musicbot.setSchID(serverConnectionHandlerID);
 	}
+
+	loadSettings();
 
     return 0;  /* 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning */
 	/* -2 is a very special case and should only be used if a plugin displays a dialog (e.g. overlay) asking the user to disable
@@ -127,9 +128,9 @@ int ts3plugin_offersConfigure() {
 
 void ts3plugin_configure(void* handle, void* qParentWidget) {
 	printf("PLUGIN: configure\n");
-	Dialog oi;
-	oi.SetupUi();
-	oi.exec();
+	SettingsDialog settings;
+	settings.SetupUi();
+	settings.exec();
 
 }
 

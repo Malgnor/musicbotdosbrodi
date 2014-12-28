@@ -31,24 +31,24 @@
     <ClCompile Include="musicbot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_dialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="telnet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="settingsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_settingsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dialog.ui" />
+    <None Include="settingsdialog.ui" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="dialog.h">
+    <CustomBuild Include="settingsdialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

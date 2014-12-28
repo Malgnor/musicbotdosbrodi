@@ -175,8 +175,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dialog.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_dialog.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_settingsdialog.cpp" />
+    <ClCompile Include="settingsdialog.cpp" />
     <ClCompile Include="global.cpp" />
     <ClCompile Include="musicbot.cpp" />
     <ClCompile Include="plugin.cpp" />
@@ -184,7 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="telnet.h" />
-    <CustomBuild Include="dialog.h">
+    <CustomBuild Include="settingsdialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing configdialog.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
@@ -207,7 +207,7 @@
     <ClInclude Include="plugin.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dialog.ui" />
+    <None Include="settingsdialog.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

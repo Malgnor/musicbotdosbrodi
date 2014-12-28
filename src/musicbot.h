@@ -18,6 +18,8 @@ private:
 	uint64 myChannelID;
 	uint64 schID;
 	TelnetClient telnet;
+	std::string rcHost;
+	int rcPort;
 
 public:
 	MusicBot();
@@ -29,17 +31,23 @@ public:
 	void setVlcPath(std::string path);
 	std::string getVlcPath();
 
+	void setHostPort(std::string host, int port);
+
 	void setChannelID(uint64 cID);
 	uint64 getChannelID();
 
 	void setSchID(uint64 sID);
+	uint64 getSchID();
 
 	anyID getMyID();
 	bool setMyID();
 
+	bool telnetConnnect(std::string host, int port);
+	bool telnetIsConnected();
 	bool enable();
 	bool disable();
-	bool getState();
+	bool isEnabled();
+	bool isConnected();
 
 	~MusicBot();
 };
