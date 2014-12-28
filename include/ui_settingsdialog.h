@@ -235,7 +235,7 @@ public:
          << QApplication::translate("SettingsDialog", "pt-BR", 0)
          << QApplication::translate("SettingsDialog", "en-US", 0)
         );
-        label_rcHost->setText(QApplication::translate("SettingsDialog", "VLC rc host:", 0));
+        label_rcHost->setText(QApplication::translate("SettingsDialog", "VLC rc ip:", 0));
         le_rcHost->setText(QApplication::translate("SettingsDialog", "127.0.0.1", 0));
         label_rcPort->setText(QApplication::translate("SettingsDialog", "porta:", 0));
         le_rcPort->setText(QApplication::translate("SettingsDialog", "32323", 0));

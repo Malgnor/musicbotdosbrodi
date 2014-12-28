@@ -68,31 +68,6 @@ int MusicBot::processCommand(string command){
 			ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 		}
 		return 0;
-	} else if (command == "channel"){
-		stringstream msg;
-		uint64* canais;
-		unsigned int res = ts3Functions.getChannelList(schID, &canais);
-		msg << "getChannelList retornou: " << res << endl;
-		if (res != ERROR_ok)
-			msg << "Erro" << endl;
-		int i = 0;
-		try{
-			while (canais[i]){
-				char* nome;
-				ts3Functions.getChannelVariableAsString(schID, canais[i], 0, &nome);
-				msg << canais[i] << ": " << nome << endl;
-				i++;
-			}
-			if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
-				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-			}
-		} catch (exception e){
-			if (ts3Functions.requestSendChannelTextMsg(schID, "CRASH", myChannelID, NULL) != ERROR_ok){
-				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-			}
-		}
-		
-		return 0;
 	}
 
 	return 0;
@@ -261,9 +236,6 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 						}
 						return 0;
 					} catch(exception e) {
-						if (ts3Functions.requestSendChannelTextMsg(schID, "CRASH!", myChannelID, NULL) != ERROR_ok){
-							ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-						}
 						return 0;
 					}
 				}
@@ -379,15 +351,6 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				stringstream b;
 				b << total;
 				msg += b.str();
-				if (ts3Functions.requestSendChannelTextMsg(schID, msg.c_str(), myChannelID, NULL) != ERROR_ok){
-					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-				}
-				if (ts3Functions.requestSendChannelTextMsg(schID, m.c_str(), myChannelID, NULL) != ERROR_ok){
-					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-				}
-				if (ts3Functions.requestSendChannelTextMsg(schID, s.c_str(), myChannelID, NULL) != ERROR_ok){
-					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
-				}
 			} catch(exception e) {
 			}
 		} else {

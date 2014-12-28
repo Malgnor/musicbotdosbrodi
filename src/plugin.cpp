@@ -22,6 +22,7 @@
 
 #include "global.h"
 #include "settingsdialog.h"
+#include <sstream>
 
 using namespace std;
 using namespace Global;
@@ -74,7 +75,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.5";
+    return "0.6";
 }
 
 int ts3plugin_apiVersion() {
@@ -96,6 +97,7 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 int ts3plugin_init() {
     printf("PLUGIN: init\n");
 
+	generateLocaleStrings();
 
 	uint64 serverConnectionHandlerID = ts3Functions.getCurrentServerConnectionHandlerID();
 	if (serverConnectionHandlerID != 0) {
@@ -160,9 +162,10 @@ void ts3plugin_freeMemory(void* data) {
 /* Client changed current server connection handler */
 void ts3plugin_currentServerConnectionChanged(uint64 serverConnectionHandlerID) {
 	printf("PLUGIN: currentServerConnectionChanged %llu (%llu)\n", (long long unsigned int)serverConnectionHandlerID, (long long unsigned int)ts3Functions.getCurrentServerConnectionHandlerID());
-	if (serverConnectionHandlerID != 0) {
-		musicbot.setSchID(serverConnectionHandlerID);
-	}
+	musicbot.setSchID(serverConnectionHandlerID);
+	stringstream a;
+	a << "serverConnectionHandlerID: " << serverConnectionHandlerID;
+	ts3Functions.printMessageToCurrentTab(a.str().c_str());
 }
 
 int ts3plugin_onTextMessageEvent(uint64 serverConnectionHandlerID, anyID targetMode, anyID toID, anyID fromID, const char* fromName, const char* fromUniqueIdentifier, const char* message, int ffIgnored) {

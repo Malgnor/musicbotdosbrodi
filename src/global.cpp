@@ -1,5 +1,6 @@
 #include "global.h"
 #include <QtCore\qsettings.h>
+#include "langs.h"
 
 namespace Global
 {
@@ -7,6 +8,9 @@ namespace Global
 	TS3Functions ts3Functions;
 
 	MusicBot musicbot;
+
+	Localization languages[2];
+	int curLanguage = LANG_EN_US;
 
 	std::string getConfigFilePath(){
 		char* configPath = (char*)malloc(512);
@@ -48,6 +52,11 @@ namespace Global
 				i++;
 			}
 		}
+	}
+
+	void generateLocaleStrings(){
+		generateENUSStrings();
+		generatePTBRStrings();
 	}
 
 }

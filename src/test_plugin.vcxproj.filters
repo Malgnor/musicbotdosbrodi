@@ -23,6 +23,9 @@
     <ClInclude Include="telnet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="langs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -41,6 +44,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_settingsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="langs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

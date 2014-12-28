@@ -180,9 +180,11 @@
     <ClCompile Include="global.cpp" />
     <ClCompile Include="musicbot.cpp" />
     <ClCompile Include="plugin.cpp" />
+    <ClCompile Include="langs.cpp" />
     <ClCompile Include="telnet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="langs.h" />
     <ClInclude Include="telnet.h" />
     <CustomBuild Include="settingsdialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing configdialog.h...</Message>
