@@ -59,6 +59,7 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].BOT_SECONDS = "segundos";
 	languages[LANG_PT_BR].BOT_AND = "e";
 	languages[LANG_PT_BR].BOT_ERROR = "ERRO!";
+	languages[LANG_PT_BR].BOT_NECESSARY_VOTES = "votos necess\303\241rios";
 
 	/* SETTINGS GUI*/
 
@@ -129,6 +130,7 @@ void generateENUSStrings(){
 	languages[LANG_EN_US].BOT_SECONDS = "seconds";
 	languages[LANG_EN_US].BOT_AND = "and";
 	languages[LANG_EN_US].BOT_ERROR = "ERROR!";
+	languages[LANG_EN_US].BOT_NECESSARY_VOTES = "necessary votes";
 
 	/* SETTINGS GUI*/
 

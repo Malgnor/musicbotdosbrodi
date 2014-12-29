@@ -7,17 +7,9 @@
 using namespace std;
 using namespace Global;
 
-MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323)
+MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323), connectedClients(0)
 {
 	telnet.inicializar();
-}
-
-bool MusicBot::telnetConnnect(string host, int port){
-	return telnet.conectar(host, port);
-}
-
-bool MusicBot::telnetIsConnected(){
-	return telnet.estaConectado();
 }
 
 int MusicBot::processCommand(string command){
@@ -25,6 +17,8 @@ int MusicBot::processCommand(string command){
 		if (!setMyID())
 			return 0;
 	}
+
+	if (!isConnected()) return 0;
 
 	if (command == languages[curLanguage].COMMAND_ACTIVATE){
 		if (enable()){
@@ -81,6 +75,8 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			return 0;
 	}
 
+	if (!isConnected()) return 0;
+
 	uint64 fromChannelID;
 
 	if (ts3Functions.getChannelOfClient(schID, fromID, &fromChannelID) != ERROR_ok) {
@@ -106,6 +102,22 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 	}
 
 	if (!enabled) return 0;
+
+	anyID* clientList;
+	if (ts3Functions.getChannelClientList(schID, myChannelID, &clientList) != ERROR_ok){
+		ts3Functions.logMessage("Error requesting channel client list", LogLevel_ERROR, "Plugin", schID);
+	}
+	int newConnectedClients = 0;
+	while (clientList[newConnectedClients]){
+		newConnectedClients++;
+	}
+	newConnectedClients--;
+	ts3Functions.freeMemory(clientList);
+	if (newConnectedClients != connectedClients){
+		votesNext.clear();
+		votesPrev.clear();
+		connectedClients = newConnectedClients;
+	}
 
 	if (message.find(languages[curLanguage].USER_COMMAND_YOUTUBE) != -1){
 		if (message.length() <= languages[curLanguage].USER_COMMAND_YOUTUBE.length()+2){
@@ -244,9 +256,55 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 		}
 	} else if (message.find(languages[curLanguage].USER_COMMAND_NEXT) != -1){
-		telnetSimpleCommand("next\r\n");
+		if (fromID == myID){
+			telnetSimpleCommand("next\r\n");
+			votesNext.clear();
+			votesPrev.clear();
+		} else {
+			if (!votesNext.empty()){
+				for (anyID id : votesNext){
+					if (fromID == id)
+						return 0;
+				}
+			}
+			votesNext.push_back(fromID);
+			if (votesNext.size() >= (connectedClients / 2)){
+				telnetSimpleCommand("next\r\n");
+				votesNext.clear();
+				votesPrev.clear();
+			} else {
+				stringstream msg;
+				msg << votesNext.size() << "/" << (connectedClients / 2) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
+				if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
+					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+				}
+			}
+		}
 	} else if (message.find(languages[curLanguage].USER_COMMAND_PREV) != -1){
-		telnetSimpleCommand("prev\r\n");
+		if (fromID == myID){
+			telnetSimpleCommand("prev\r\n");
+			votesNext.clear();
+			votesPrev.clear();
+		} else {
+			if (!votesPrev.empty()){
+				for (anyID id : votesPrev){
+					if (fromID == id)
+						return 0;
+				}
+			}
+			votesPrev.push_back(fromID);
+			if (votesPrev.size() >= (connectedClients / 2)){
+				telnetSimpleCommand("prev\r\n");
+				votesNext.clear();
+				votesPrev.clear();
+			} else {
+				stringstream msg;
+				msg << votesPrev.size() << "/" << (connectedClients / 2) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
+				if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
+					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
+				}
+			}
+		}
 	} else if (message.find(languages[curLanguage].USER_COMMAND_PAUSE) != -1){
 		telnetSimpleCommand("pause\r\n");
 	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAY) != -1){
@@ -308,6 +366,8 @@ void MusicBot::onClientMove(anyID clientID, uint64 toChannel){
 		if (!setMyID())
 			return;
 	}
+
+	if (!isConnected()) return;
 
 	if (myChannelID != toChannel)
 		return;
@@ -436,6 +496,7 @@ int MusicBot::telnetSimpleCommand(string cmd){
 		}
 		return 0;
 	}
+	return 0;
 }
 
 MusicBot::~MusicBot(){}

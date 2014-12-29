@@ -48,6 +48,7 @@ struct Localization {
 	std::string BOT_SECONDS;
 	std::string BOT_AND;
 	std::string BOT_ERROR;
+	std::string BOT_NECESSARY_VOTES;
 
 	/* SETTINGS GUI*/
 

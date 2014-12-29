@@ -45,33 +45,8 @@ using namespace Global;
 
 static char* pluginID = NULL;
 
-#ifdef _WIN32
-/* Helper function to convert wchar_T to Utf-8 encoded strings on Windows */
-static int wcharToUtf8(const wchar_t* str, char** result) {
-	int outlen = WideCharToMultiByte(CP_UTF8, 0, str, -1, 0, 0, 0, 0);
-	*result = (char*)malloc(outlen);
-	if(WideCharToMultiByte(CP_UTF8, 0, str, -1, *result, outlen, 0, 0) == 0) {
-		*result = NULL;
-		return -1;
-	}
-	return 0;
-}
-#endif
-
 const char* ts3plugin_name() {
-#ifdef _WIN32
-	/* TeamSpeak expects UTF-8 encoded characters. Following demonstrates a possibility how to convert UTF-16 wchar_t into UTF-8. */
-	static char* result = NULL;  /* Static variable so it's allocated only once */
-	if(!result) {
-		const wchar_t* name = L"Musicbot dos Brodi";
-		if(wcharToUtf8(name, &result) == -1) {
-			result = "Musicbot dos Brodi";
-		}
-	}
-	return result;
-#else
 	return "Musicbot dos Brodi";
-#endif
 }
 
 const char* ts3plugin_version() {

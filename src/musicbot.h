@@ -20,6 +20,10 @@ private:
 	TelnetClient telnet;
 	std::string rcHost;
 	int rcPort;
+	
+	std::vector<anyID> votesNext;
+	std::vector<anyID> votesPrev;
+	int connectedClients;
 
 public:
 	MusicBot();
@@ -48,6 +52,8 @@ public:
 	bool disable();
 	bool isEnabled();
 	bool isConnected();
+
+	int telnetSimpleCommand(std::string cmd);
 
 	~MusicBot();
 };
