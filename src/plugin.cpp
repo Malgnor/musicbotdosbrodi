@@ -75,7 +75,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.6";
+    return "0.6.3";
 }
 
 int ts3plugin_apiVersion() {
@@ -87,7 +87,7 @@ const char* ts3plugin_author() {
 }
 
 const char* ts3plugin_description() {
-    return "";
+    return "This is a musicbot plugin, it has commands to add music from youtube to playlist, change music, pause and many other functions.";
 }
 
 void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
@@ -164,8 +164,25 @@ void ts3plugin_currentServerConnectionChanged(uint64 serverConnectionHandlerID) 
 	printf("PLUGIN: currentServerConnectionChanged %llu (%llu)\n", (long long unsigned int)serverConnectionHandlerID, (long long unsigned int)ts3Functions.getCurrentServerConnectionHandlerID());
 	musicbot.setSchID(serverConnectionHandlerID);
 	stringstream a;
-	a << "serverConnectionHandlerID: " << serverConnectionHandlerID;
+	a << "oldServerConnectionHandlerID: " << serverConnectionHandlerID << endl;
+	a << "newServerConnectionHandlerID: " << ts3Functions.getCurrentServerConnectionHandlerID() << endl;
 	ts3Functions.printMessageToCurrentTab(a.str().c_str());
+}
+
+void ts3plugin_onConnectStatusChangeEvent(uint64 serverConnectionHandlerID, int newStatus, unsigned int errorNumber) {
+	switch (newStatus) {
+	case STATUS_DISCONNECTED: {
+		musicbot.setSchID(0);
+		stringstream a;
+		a << "oldServerConnectionHandlerID: " << serverConnectionHandlerID << endl;
+		a << "newServerConnectionHandlerID: " << ts3Functions.getCurrentServerConnectionHandlerID() << endl;
+		ts3Functions.printMessageToCurrentTab(a.str().c_str());
+		break;
+	}
+	case STATUS_CONNECTION_ESTABLISHED:
+		musicbot.setSchID(serverConnectionHandlerID);
+		break;
+	}
 }
 
 int ts3plugin_onTextMessageEvent(uint64 serverConnectionHandlerID, anyID targetMode, anyID toID, anyID fromID, const char* fromName, const char* fromUniqueIdentifier, const char* message, int ffIgnored) {
