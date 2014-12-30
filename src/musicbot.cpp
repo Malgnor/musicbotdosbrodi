@@ -7,9 +7,12 @@
 using namespace std;
 using namespace Global;
 
+//MusicBot* MusicBot::mb = 0;
+
 MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323), connectedClients(0),
-voteEnabled(false), pVoteNeeded(0.5f)
+voteEnabled(false), pVoteNeeded(0.5f)//, endThread(false), thread(0)
 {
+	//mb = this;
 	telnet.inicializar();
 	for (int i = 0; i < 9; i++){
 		commandsEnabled[i] = true;
@@ -170,11 +173,11 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			return 0;
 		}
 		if (telnet.enviar("get_title\r\n") > 0){
-			Sleep(100);
+			Sleep(25);
 			string resposta = "";
 			if (telnet.receber(resposta, 2048) > 0){
 				if (telnet.enviar("get_title\r\n") > 0){
-					Sleep(100);
+					Sleep(25);
 					resposta = "";
 					if (telnet.receber(resposta, 2048) > 0){
 						int l = (int)resposta.find("\n");
@@ -215,7 +218,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			return 0;
 		}
 		while (telnet.enviar("get_length\r\n") > 0){
-			Sleep(100);
+			Sleep(25);
 			string resposta = "";
 			if (telnet.receber(resposta, 2048) > 0){
 				int l = (int)resposta.find("\n");
@@ -351,7 +354,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 		}
 		msg += "\r\n";
 		if (telnet.enviar(msg) > 0){
-			Sleep(100);
+			Sleep(25);
 			string resposta = "";
 			if (telnet.receber(resposta, 2048) > 0){
 				return 0;
@@ -529,7 +532,7 @@ int MusicBot::telnetSimpleCommand(string cmd){
 		return 0;
 	}
 	if (telnet.enviar(cmd) > 0){
-		Sleep(100);
+		Sleep(25);
 		string resposta = "";
 		if (telnet.receber(resposta, 2048) > 0){
 			return 0;
@@ -543,4 +546,72 @@ int MusicBot::telnetSimpleCommand(string cmd){
 	return 0;
 }
 
-MusicBot::~MusicBot(){}
+/*
+DWORD WINAPI MusicBot::telnetThread(LPVOID lpParam){
+	string resposta;
+	while (1){
+		if (mb){
+			if (!mb->endThread){
+				if (mb->telnet.estaConectado()){
+					if (mb->enabled){
+						if (mb->telnet.receber(resposta, 2048)){
+							//if (ts3Functions.requestSendChannelTextMsg(mb->schID, resposta.c_str(), mb->myChannelID, NULL) != ERROR_ok){
+								ts3Functions.logMessage("Teste", LogLevel_DEBUG, "Plugin", mb->schID);
+							//}
+						}
+					}
+				}
+				Sleep(100);
+			} else {
+				break;
+			}
+		} else {
+			break;
+		}
+	}
+	return 0;
+}
+
+bool MusicBot::startThread(){
+	endThread = false;
+	thread = CreateThread(NULL, 0, telnetThread, NULL, 0, NULL);
+	if (thread == 0) {
+		ts3Functions.logMessage("Error starting thread", LogLevel_ERROR, "Plugin", schID);
+		return false;
+	}
+	return true;
+}
+
+void MusicBot::requestEndThread(){
+	if (thread != 0) {
+		bool threadClosed = false;
+		endThread = true;
+		DWORD threadReturn = WaitForSingleObject(thread, 1000);
+		switch (threadReturn) {
+		case WAIT_ABANDONED:
+			ts3Functions.logMessage("Thread abandoned", LogLevel_DEBUG, "Plugin", schID);
+			break;
+		case WAIT_OBJECT_0:
+			ts3Functions.logMessage("Thread has exited", LogLevel_DEBUG, "Plugin", schID);
+			CloseHandle(thread);
+			threadClosed = true;
+			break;
+		case WAIT_TIMEOUT:
+			ts3Functions.logMessage("Thread timedout", LogLevel_DEBUG, "Plugin", schID);
+			break;
+		case WAIT_FAILED:
+			ts3Functions.logMessage("Waiting on thread failed", LogLevel_DEBUG, "Plugin", schID);
+			break;
+		}
+
+		if (!threadClosed) {
+			TerminateThread(thread, 0);
+			CloseHandle(thread);
+		}
+	}
+}
+*/
+
+MusicBot::~MusicBot(){
+	//mb = 0;
+}

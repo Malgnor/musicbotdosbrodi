@@ -29,6 +29,14 @@ private:
 	bool voteEnabled;
 	float pVoteNeeded;
 
+	/*
+	HANDLE thread;
+	bool endThread;
+	static MusicBot* mb;
+
+	static DWORD WINAPI telnetThread(LPVOID lpParam);
+	*/
+
 public:
 	MusicBot();
 
@@ -67,6 +75,11 @@ public:
 	bool isConnected();
 
 	int telnetSimpleCommand(std::string cmd);
+	
+	/*
+	bool startThread();
+	void requestEndThread();
+	*/
 
 	~MusicBot();
 };

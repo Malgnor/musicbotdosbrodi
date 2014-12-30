@@ -56,7 +56,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.6.5";
+    return "0.7";
 }
 
 int ts3plugin_apiVersion() {
@@ -78,6 +78,12 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 int ts3plugin_init() {
     printf("PLUGIN: init\n");
 
+	/*
+	if (!musicbot.startThread()){
+		return 1;
+	}
+	*/
+
 	generateLocaleStrings();
 
 	uint64 serverConnectionHandlerID = ts3Functions.getCurrentServerConnectionHandlerID();
@@ -96,6 +102,10 @@ int ts3plugin_init() {
 void ts3plugin_shutdown() {
 
     printf("PLUGIN: shutdown\n");
+
+	/*
+	musicbot.requestEndThread();
+	*/
 
 	if(pluginID) {
 		free(pluginID);
