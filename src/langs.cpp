@@ -65,6 +65,7 @@ void generatePTBRStrings(){
 	/* SETTINGS GUI*/
 
 	languages[LANG_PT_BR].GUI_TITLE_SETTINGS = "Configura\303\247\303\265es";
+	languages[LANG_PT_BR].GUI_TITLE_COMMANDS = "Comandos";
 	languages[LANG_PT_BR].GUI_LABEL_VLC_EXE_PATH = "Caminho do execut\303\241vel do VLC:";
 	languages[LANG_PT_BR].GUI_LABEL_MUSIC_CHANNEL = "Canal de m\303\272sica";
 	languages[LANG_PT_BR].GUI_BUTTON_USE_CURRENT_CHANNEL = "Usar canal atual";
@@ -140,6 +141,7 @@ void generateENUSStrings(){
 	/* SETTINGS GUI*/
 
 	languages[LANG_EN_US].GUI_TITLE_SETTINGS = "Settings";
+	languages[LANG_EN_US].GUI_TITLE_COMMANDS = "Commands";
 	languages[LANG_EN_US].GUI_LABEL_VLC_EXE_PATH = "VLC exe path:";
 	languages[LANG_EN_US].GUI_LABEL_MUSIC_CHANNEL = "Music channel";
 	languages[LANG_EN_US].GUI_BUTTON_USE_CURRENT_CHANNEL = "Use current channel";
