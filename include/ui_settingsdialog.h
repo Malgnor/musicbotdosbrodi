@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
@@ -21,15 +22,14 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
-
 
 QT_BEGIN_NAMESPACE
 
 class Ui_SettingsDialog
 {
 public:
-	QDialogButtonBox *bb_okCancel;
 	QWidget *layoutWidget;
 	QHBoxLayout *horizontalLayout;
 	QLabel *label_vlcPath;
@@ -51,14 +51,20 @@ public:
 	QLineEdit *le_rcPort;
 	QWidget *horizontalLayoutWidget_2;
 	QHBoxLayout *horizontalLayout_5;
-	QPushButton *pb_connectVlc;
+	QCheckBox *chb_vote;
+	QSpinBox *sb_vote;
 	QWidget *horizontalLayoutWidget_3;
 	QHBoxLayout *horizontalLayout_6;
-	QPushButton *pb_enableBot;
+	QPushButton *pb_commandsControl;
 	QWidget *horizontalLayoutWidget_4;
 	QHBoxLayout *horizontalLayout_7;
+	QPushButton *pb_connectVlc;
 	QWidget *horizontalLayoutWidget_5;
 	QHBoxLayout *horizontalLayout_8;
+	QPushButton *pb_enableBot;
+	QWidget *horizontalLayoutWidget_6;
+	QHBoxLayout *horizontalLayout_9;
+	QDialogButtonBox *bb_okCancel;
 
 	void setupUi(QDialog *SettingsDialog)
 	{
@@ -76,12 +82,6 @@ public:
 		SettingsDialog->setMaximumSize(QSize(520, 350));
 		SettingsDialog->setSizeGripEnabled(false);
 		SettingsDialog->setModal(false);
-		bb_okCancel = new QDialogButtonBox(SettingsDialog);
-		bb_okCancel->setObjectName(QStringLiteral("bb_okCancel"));
-		bb_okCancel->setGeometry(QRect(20, 310, 481, 32));
-		bb_okCancel->setOrientation(Qt::Horizontal);
-		bb_okCancel->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
-		bb_okCancel->setCenterButtons(true);
 		layoutWidget = new QWidget(SettingsDialog);
 		layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
 		layoutWidget->setGeometry(QRect(10, 10, 501, 31));
@@ -169,10 +169,19 @@ public:
 		horizontalLayout_5 = new QHBoxLayout(horizontalLayoutWidget_2);
 		horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
 		horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
-		pb_connectVlc = new QPushButton(horizontalLayoutWidget_2);
-		pb_connectVlc->setObjectName(QStringLiteral("pb_connectVlc"));
+		chb_vote = new QCheckBox(horizontalLayoutWidget_2);
+		chb_vote->setObjectName(QStringLiteral("chb_vote"));
+		chb_vote->setChecked(false);
+		chb_vote->setTristate(false);
 
-		horizontalLayout_5->addWidget(pb_connectVlc);
+		horizontalLayout_5->addWidget(chb_vote);
+
+		sb_vote = new QSpinBox(horizontalLayoutWidget_2);
+		sb_vote->setObjectName(QStringLiteral("sb_vote"));
+		sb_vote->setMaximum(100);
+		sb_vote->setValue(50);
+
+		horizontalLayout_5->addWidget(sb_vote);
 
 		horizontalLayoutWidget_3 = new QWidget(SettingsDialog);
 		horizontalLayoutWidget_3->setObjectName(QStringLiteral("horizontalLayoutWidget_3"));
@@ -180,10 +189,10 @@ public:
 		horizontalLayout_6 = new QHBoxLayout(horizontalLayoutWidget_3);
 		horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
 		horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
-		pb_enableBot = new QPushButton(horizontalLayoutWidget_3);
-		pb_enableBot->setObjectName(QStringLiteral("pb_enableBot"));
+		pb_commandsControl = new QPushButton(horizontalLayoutWidget_3);
+		pb_commandsControl->setObjectName(QStringLiteral("pb_commandsControl"));
 
-		horizontalLayout_6->addWidget(pb_enableBot);
+		horizontalLayout_6->addWidget(pb_commandsControl);
 
 		horizontalLayoutWidget_4 = new QWidget(SettingsDialog);
 		horizontalLayoutWidget_4->setObjectName(QStringLiteral("horizontalLayoutWidget_4"));
@@ -191,12 +200,35 @@ public:
 		horizontalLayout_7 = new QHBoxLayout(horizontalLayoutWidget_4);
 		horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
 		horizontalLayout_7->setContentsMargins(0, 0, 0, 0);
+		pb_connectVlc = new QPushButton(horizontalLayoutWidget_4);
+		pb_connectVlc->setObjectName(QStringLiteral("pb_connectVlc"));
+
+		horizontalLayout_7->addWidget(pb_connectVlc);
+
 		horizontalLayoutWidget_5 = new QWidget(SettingsDialog);
 		horizontalLayoutWidget_5->setObjectName(QStringLiteral("horizontalLayoutWidget_5"));
 		horizontalLayoutWidget_5->setGeometry(QRect(10, 270, 501, 31));
 		horizontalLayout_8 = new QHBoxLayout(horizontalLayoutWidget_5);
 		horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
 		horizontalLayout_8->setContentsMargins(0, 0, 0, 0);
+		pb_enableBot = new QPushButton(horizontalLayoutWidget_5);
+		pb_enableBot->setObjectName(QStringLiteral("pb_enableBot"));
+
+		horizontalLayout_8->addWidget(pb_enableBot);
+
+		horizontalLayoutWidget_6 = new QWidget(SettingsDialog);
+		horizontalLayoutWidget_6->setObjectName(QStringLiteral("horizontalLayoutWidget_6"));
+		horizontalLayoutWidget_6->setGeometry(QRect(10, 310, 501, 31));
+		horizontalLayout_9 = new QHBoxLayout(horizontalLayoutWidget_6);
+		horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+		horizontalLayout_9->setContentsMargins(0, 0, 0, 0);
+		bb_okCancel = new QDialogButtonBox(horizontalLayoutWidget_6);
+		bb_okCancel->setObjectName(QStringLiteral("bb_okCancel"));
+		bb_okCancel->setOrientation(Qt::Horizontal);
+		bb_okCancel->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
+		bb_okCancel->setCenterButtons(true);
+
+		horizontalLayout_9->addWidget(bb_okCancel);
 
 		QObject::connect(bb_okCancel, SIGNAL(accepted()), SettingsDialog, SLOT(accept()));
 		QObject::connect(bb_okCancel, SIGNAL(rejected()), SettingsDialog, SLOT(reject()));
@@ -204,6 +236,8 @@ public:
 		QObject::connect(pb_enableBot, SIGNAL(clicked()), SettingsDialog, SLOT(toggleBot()));
 		QObject::connect(pb_selfChannel, SIGNAL(clicked()), SettingsDialog, SLOT(useSelfChannel()));
 		QObject::connect(cb_language, SIGNAL(currentIndexChanged(int)), SettingsDialog, SLOT(onLanguageChange(int)));
+		QObject::connect(pb_commandsControl, SIGNAL(clicked()), SettingsDialog, SLOT(commandControl()));
+		QObject::connect(chb_vote, SIGNAL(toggled(bool)), SettingsDialog, SLOT(voteToggle(bool)));
 
 		QMetaObject::connectSlotsByName(SettingsDialog);
 	} // setupUi

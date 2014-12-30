@@ -22,12 +22,28 @@ namespace Global
 	}
 
 	void loadSettings(){
+
 		QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
+		
 		curLanguage = cfg.value("lang", LANG_EN_US).toInt();
-		musicbot.setVlcPath(cfg.value("vlcPath", "\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"").toString().toStdString());
+		
+		musicbot.setVlcPath(cfg.value("vlcPath", "\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --extraintf rc --rc-host 127.0.0.1:32323").toString().toStdString());
 		std::string host = cfg.value("rcHost", "127.0.0.1").toString().toStdString();
 		int port = cfg.value("rcPort", 32323).toInt();
 		musicbot.setHostPort(host, port);
+		
+		musicbot.setVote(cfg.value("voteEnabled", false).toBool());
+		musicbot.setPVoteNeeded(cfg.value("pVoteNeeded", 0.5f).toFloat());
+
+		bool cmds[9];
+		cfg.beginReadArray("commandsEnabled");
+		for (int j = 0; j < 9; j++){
+			cfg.setArrayIndex(j);
+			cmds[j] = cfg.value("cmd", true).toBool();
+		}
+		cfg.endArray();
+		musicbot.setCommandsEnabled(cmds);
+
 		if (musicbot.isConnected()){
 			std::string channel = cfg.value("channelName", "Default Channel").toString().toStdString();
 			uint64 schID = musicbot.getSchID();
@@ -41,18 +57,20 @@ namespace Global
 				char* nomeCanal;
 				if (ts3Functions.getChannelVariableAsString(schID, canais[i], 0, &nomeCanal) != ERROR_ok){
 					ts3Functions.logMessage("Error requesting channel name", LogLevel_ERROR, "Plugin", schID);
-					return;
+					break;
 				}
 				std::string nome = nomeCanal;
 				if (nome == channel){
 					musicbot.setChannelID(canais[i]);
-					delete[] nomeCanal;
+					ts3Functions.freeMemory(nomeCanal);
 					break;
 				}
-				delete[] nomeCanal;
+				ts3Functions.freeMemory(nomeCanal);
 				i++;
 			}
+			ts3Functions.freeMemory(canais);
 		}
+
 	}
 
 	void generateLocaleStrings(){

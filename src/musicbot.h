@@ -25,6 +25,10 @@ private:
 	std::vector<anyID> votesPrev;
 	int connectedClients;
 
+	bool commandsEnabled[9];
+	bool voteEnabled;
+	float pVoteNeeded;
+
 public:
 	MusicBot();
 
@@ -45,6 +49,15 @@ public:
 
 	anyID getMyID();
 	bool setMyID();
+
+	void setVote(bool vote);
+	bool getVote();
+
+	void setCommandsEnabled(bool commands[9]);
+	bool* getCommandsEnabled();
+
+	void setPVoteNeeded(float p);
+	float getPVoteNeeded();
 
 	bool telnetConnnect(std::string host, int port);
 	bool telnetIsConnected();

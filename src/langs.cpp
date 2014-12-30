@@ -14,9 +14,9 @@ void generatePTBRStrings(){
 	/* INFOS */
 
 	languages[LANG_PT_BR].BOT_ACTIVATED_SUCESS = "O bot agora est\303\241 ativado!";
-	languages[LANG_PT_BR].BOT_ACTIVATED_FAIL = "O bot n\305\241o foi ativado!";
+	languages[LANG_PT_BR].BOT_ACTIVATED_FAIL = "O bot n\303\243o foi ativado!";
 	languages[LANG_PT_BR].BOT_DEACTIVATED_SUCESS = "O bot agora est\303\241 desativado!";
-	languages[LANG_PT_BR].BOT_DEACTIVATED_FAIL = "O bot n\305\241o foi desativado!";
+	languages[LANG_PT_BR].BOT_DEACTIVATED_FAIL = "O bot n\303\243o foi desativado!";
 	languages[LANG_PT_BR].BOT_CONNECT_SUCESS = "Sucesso ao conectar!";
 	languages[LANG_PT_BR].BOT_CONNECT_FAIL = "Falha ao conectar!";
 	languages[LANG_PT_BR].BOT_ALREADY_CONNECTED = "J\303\241 esta conectado.";
@@ -53,7 +53,7 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].BOT_HELP_WHEN_DISABLED = "Bem-Vindo ao meu canal de m\303\272sica!\n\
 												   Atualmente estou desativado.\n\
 												   Entre em contato com algum admin para mais info.";
-	languages[LANG_PT_BR].BOT_TELNET_NOT_CONNECTED = "Telnet n\305\241o est\303\241 conectado.";
+	languages[LANG_PT_BR].BOT_TELNET_NOT_CONNECTED = "Telnet n\303\243o est\303\241 conectado.";
 	languages[LANG_PT_BR].BOT_TRY_AGAIN = "Tente novamente!";
 	languages[LANG_PT_BR].BOT_MINUTES = "minutos";
 	languages[LANG_PT_BR].BOT_SECONDS = "segundos";
@@ -68,11 +68,14 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].GUI_LABEL_MUSIC_CHANNEL = "Canal de m\303\272sica";
 	languages[LANG_PT_BR].GUI_BUTTON_USE_CURRENT_CHANNEL = "Usar canal atual";
 	languages[LANG_PT_BR].GUI_LABEL_LANGUAGE = "Idioma";
-	languages[LANG_PT_BR].GUI_LAVEL_RC_PORT = "Porta:";
+	languages[LANG_PT_BR].GUI_LABEL_RC_PORT = "Porta:";
 	languages[LANG_PT_BR].GUI_BUTTON_CONNECT_TO_VLC = "Conectar ao VLC";
 	languages[LANG_PT_BR].GUI_BUTTON_CONNECTED = "Conectado";
 	languages[LANG_PT_BR].GUI_BUTTON_DEACTIVATE_BOT = "Desativar bot";
 	languages[LANG_PT_BR].GUI_BUTTON_ACTIVATE_BOT = "Ativar bot";
+	languages[LANG_PT_BR].GUI_BUTTON_ENABLE_DISABLE_COMMANDS = "Habilitar/Desabilitar comandos";
+	languages[LANG_PT_BR].GUI_CHB_COMMAND_BY_VOTES = "Comando por votos";
+	languages[LANG_PT_BR].GUI_PREFFIX_NECESSARY_VOTES = "Votos necess\303\241rios: ";
 }
 
 void generateENUSStrings(){
@@ -139,10 +142,13 @@ void generateENUSStrings(){
 	languages[LANG_EN_US].GUI_LABEL_MUSIC_CHANNEL = "Music channel";
 	languages[LANG_EN_US].GUI_BUTTON_USE_CURRENT_CHANNEL = "Use current channel";
 	languages[LANG_EN_US].GUI_LABEL_LANGUAGE = "Language";
-	languages[LANG_EN_US].GUI_LAVEL_RC_PORT = "Port:";
+	languages[LANG_EN_US].GUI_LABEL_RC_PORT = "Port:";
 	languages[LANG_EN_US].GUI_BUTTON_CONNECT_TO_VLC = "Connect to VLC";
 	languages[LANG_EN_US].GUI_BUTTON_CONNECTED = "Connected";
 	languages[LANG_EN_US].GUI_BUTTON_DEACTIVATE_BOT = "Deactivate bot";
 	languages[LANG_EN_US].GUI_BUTTON_ACTIVATE_BOT = "Activate bot";
+	languages[LANG_EN_US].GUI_BUTTON_ENABLE_DISABLE_COMMANDS = "Enable/Disable commands";
+	languages[LANG_EN_US].GUI_CHB_COMMAND_BY_VOTES = "Commands by votes";
+	languages[LANG_EN_US].GUI_PREFFIX_NECESSARY_VOTES = "Necessary votes: ";
 
 }

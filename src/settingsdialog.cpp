@@ -14,12 +14,17 @@ SettingsDialog::SettingsDialog()
 void SettingsDialog::SetupUi(){
 
 	setupUi(this);
-	retranslateUi();
+	translateUi();
 	QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
-	le_vlcPath->setText(cfg.value("vlcPath", "\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"").toString());
+	le_vlcPath->setText(cfg.value("vlcPath", "\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --extraintf rc --rc-host 127.0.0.1:32323").toString());
 	le_rcHost->setText(cfg.value("rcHost", "127.0.0.1").toString());
 	le_rcPort->setText(cfg.value("rcPort", 32323).toString());
 	cb_language->setCurrentIndex(cfg.value("lang", LANG_EN_US).toInt());
+	chb_vote->setChecked(cfg.value("voteEnabled", false).toBool());
+	sb_vote->setValue(int(cfg.value("pVoteNeeded", 0.5f).toFloat()*100.0f));
+
+	if (!chb_vote->isChecked())
+		sb_vote->setEnabled(false);
 
 	if (musicbot.telnetIsConnected()){
 		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
@@ -62,11 +67,11 @@ void SettingsDialog::SetupUi(){
 
 }
 
-void SettingsDialog::retranslateUi()
+void SettingsDialog::translateUi()
 {
 	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
 	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
-	le_vlcPath->setText("\"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe\"");
+	le_vlcPath->setText("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --extraintf rc --rc-host 127.0.0.1:32323");
 	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
 	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
 	cb_channelList->clear();
@@ -79,12 +84,37 @@ void SettingsDialog::retranslateUi()
 		<< "pt-BR"
 		<< "en-US"
 		);
-	label_rcHost->setText("VLC rc ip:");
+	label_rcHost->setText("VLC rc Ip:");
 	le_rcHost->setText("127.0.0.1");
-	label_rcPort->setText(languages[curLanguage].GUI_LAVEL_RC_PORT.c_str());
+	label_rcPort->setText(languages[curLanguage].GUI_LABEL_RC_PORT.c_str());
 	le_rcPort->setText("32323");
+	chb_vote->setText(languages[curLanguage].GUI_CHB_COMMAND_BY_VOTES.c_str());
+	sb_vote->setSuffix("%");
+	sb_vote->setPrefix(languages[curLanguage].GUI_PREFFIX_NECESSARY_VOTES.c_str());
+	pb_commandsControl->setText(languages[curLanguage].GUI_BUTTON_ENABLE_DISABLE_COMMANDS.c_str());
 	pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECT_TO_VLC.c_str());
 	pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
+}
+
+void SettingsDialog::retranslateUi()
+{
+	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
+	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
+	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
+	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
+	label_language->setText(languages[curLanguage].GUI_LABEL_LANGUAGE.c_str());
+	label_rcPort->setText(languages[curLanguage].GUI_LABEL_RC_PORT.c_str());
+	chb_vote->setText(languages[curLanguage].GUI_CHB_COMMAND_BY_VOTES.c_str());
+	sb_vote->setPrefix(languages[curLanguage].GUI_PREFFIX_NECESSARY_VOTES.c_str());
+	pb_commandsControl->setText(languages[curLanguage].GUI_BUTTON_ENABLE_DISABLE_COMMANDS.c_str());
+	if (musicbot.telnetIsConnected())
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
+	else
+		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECT_TO_VLC.c_str());
+	if (musicbot.isEnabled())
+		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_DEACTIVATE_BOT.c_str());
+	else
+		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
 }
 
 
@@ -95,9 +125,15 @@ void SettingsDialog::accept(){
 	cfg.setValue("rcHost", le_rcHost->text());
 	cfg.setValue("rcPort", le_rcPort->text().toInt());
 	cfg.setValue("lang", cb_language->currentIndex());
+	cfg.setValue("voteEnabled", chb_vote->isChecked());
+	float pvn = ((float)sb_vote->value()) / 100.0f;
+	cfg.setValue("pVoteNeeded", pvn);
+
 	curLanguage = cb_language->currentIndex();
 	musicbot.setVlcPath(le_vlcPath->text().toStdString());
 	musicbot.setHostPort(le_rcHost->text().toStdString(), le_rcPort->text().toInt());
+	musicbot.setVote(chb_vote->isChecked());
+	musicbot.setPVoteNeeded(pvn);
 
 	uint64 schID = musicbot.getSchID();
 	uint64* canais;
@@ -115,12 +151,13 @@ void SettingsDialog::accept(){
 			std::string nome = nomeCanal;
 			if (nome == cb_channelList->currentText().toStdString()){
 				musicbot.setChannelID(canais[i]);
-				delete[] nomeCanal;
+				ts3Functions.freeMemory(nomeCanal);
 				break;
 			}
-			delete[] nomeCanal;
+			ts3Functions.freeMemory(nomeCanal);
 			i++;
 		}
+		ts3Functions.freeMemory(canais);
 	}
 
 	QDialog::accept();
@@ -207,25 +244,19 @@ void SettingsDialog::toggleBot(){
 
 void SettingsDialog::onLanguageChange(int lang){
 	curLanguage = lang;
-	translateUi();
+	retranslateUi();
 }
 
-void SettingsDialog::translateUi()
-{
-	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
-	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
-	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
-	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
-	label_language->setText(languages[curLanguage].GUI_LABEL_LANGUAGE.c_str());
-	label_rcPort->setText(languages[curLanguage].GUI_LAVEL_RC_PORT.c_str());
-	if (musicbot.telnetIsConnected())
-		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECTED.c_str());
-	else
-		pb_connectVlc->setText(languages[curLanguage].GUI_BUTTON_CONNECT_TO_VLC.c_str());
-	if (musicbot.isEnabled())
-		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_DEACTIVATE_BOT.c_str());
-	else
-		pb_enableBot->setText(languages[curLanguage].GUI_BUTTON_ACTIVATE_BOT.c_str());
+void SettingsDialog::commandControl(){
+
+}
+
+void SettingsDialog::voteToggle(bool enabled){
+	if (enabled){
+		sb_vote->setEnabled(true);
+	} else {
+		sb_vote->setEnabled(false);
+	}
 }
 
 void SettingsDialog::reject(){

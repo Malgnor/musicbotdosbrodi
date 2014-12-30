@@ -25,15 +25,15 @@ struct Localization {
 
 	/* COMMANDS ! */
 
-	std::string USER_COMMAND_YOUTUBE;
-	std::string USER_COMMAND_HELP;
-	std::string USER_COMMAND_PLAYING;
-	std::string USER_COMMAND_LENGTH;
-	std::string USER_COMMAND_NEXT;
-	std::string USER_COMMAND_PREV;
-	std::string USER_COMMAND_PAUSE;
-	std::string USER_COMMAND_PLAY;
-	std::string USER_COMMAND_GOTO;
+	std::string USER_COMMAND_YOUTUBE;	// 0
+	std::string USER_COMMAND_HELP;		// 1
+	std::string USER_COMMAND_PLAYING;	// 2
+	std::string USER_COMMAND_LENGTH;	// 3
+	std::string USER_COMMAND_NEXT;		// 4
+	std::string USER_COMMAND_PREV;		// 5
+	std::string USER_COMMAND_PAUSE;		// 6
+	std::string USER_COMMAND_PLAY;		// 7
+	std::string USER_COMMAND_GOTO;		// 8
 
 	/* INFOS */
 
@@ -57,11 +57,14 @@ struct Localization {
 	std::string GUI_LABEL_MUSIC_CHANNEL;
 	std::string GUI_BUTTON_USE_CURRENT_CHANNEL;
 	std::string GUI_LABEL_LANGUAGE;
-	std::string GUI_LAVEL_RC_PORT;
+	std::string GUI_LABEL_RC_PORT;
 	std::string GUI_BUTTON_CONNECT_TO_VLC;
 	std::string GUI_BUTTON_CONNECTED;
 	std::string GUI_BUTTON_DEACTIVATE_BOT;
 	std::string GUI_BUTTON_ACTIVATE_BOT;
+	std::string GUI_CHB_COMMAND_BY_VOTES;
+	std::string GUI_PREFFIX_NECESSARY_VOTES;
+	std::string GUI_BUTTON_ENABLE_DISABLE_COMMANDS;
 };
 
 namespace Global

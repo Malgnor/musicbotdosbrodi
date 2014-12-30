@@ -43,25 +43,6 @@
   <property name="modal">
    <bool>false</bool>
   </property>
-  <widget class="QDialogButtonBox" name="bb_okCancel">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>310</y>
-     <width>481</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-   <property name="centerButtons">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
@@ -75,14 +56,14 @@
     <item>
      <widget class="QLabel" name="label_vlcPath">
       <property name="text">
-       <string>Caminho do executável do VLC win32:</string>
+       <string>Caminho do executável do VLC:</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QLineEdit" name="le_vlcPath">
       <property name="text">
-       <string>&quot;C:\Program Files\VideoLAN\VLC\vlc.exe&quot;</string>
+       <string>&quot;C:\Program Files (x86)\VideoLAN\VLC\vlc.exe&quot; --extraintf rc --rc-host 127.0.0.1:32323</string>
       </property>
      </widget>
     </item>
@@ -175,7 +156,7 @@
     <item>
      <widget class="QLabel" name="label_rcHost">
       <property name="text">
-       <string>VLC rc host:</string>
+       <string>VLC rc Ip:</string>
       </property>
      </widget>
     </item>
@@ -189,7 +170,7 @@
     <item>
      <widget class="QLabel" name="label_rcPort">
       <property name="text">
-       <string>porta:</string>
+       <string>Porta:</string>
       </property>
      </widget>
     </item>
@@ -213,9 +194,31 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
-     <widget class="QPushButton" name="pb_connectVlc">
+     <widget class="QCheckBox" name="chb_vote">
       <property name="text">
-       <string>Conectar ao VLC</string>
+       <string>Comando por votos</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="tristate">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="sb_vote">
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="prefix">
+       <string>Votos necessários: </string>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>50</number>
       </property>
      </widget>
     </item>
@@ -232,9 +235,9 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_6">
     <item>
-     <widget class="QPushButton" name="pb_enableBot">
+     <widget class="QPushButton" name="pb_commandsControl">
       <property name="text">
-       <string>Ativar bot</string>
+       <string>Habilitar/Desabilitar comandos</string>
       </property>
      </widget>
     </item>
@@ -249,7 +252,15 @@
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_7"/>
+   <layout class="QHBoxLayout" name="horizontalLayout_7">
+    <item>
+     <widget class="QPushButton" name="pb_connectVlc">
+      <property name="text">
+       <string>Conectar ao VLC</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_5">
    <property name="geometry">
@@ -260,7 +271,40 @@
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
+    <item>
+     <widget class="QPushButton" name="pb_enableBot">
+      <property name="text">
+       <string>Ativar bot</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>501</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <item>
+     <widget class="QDialogButtonBox" name="bb_okCancel">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+      <property name="centerButtons">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
@@ -361,11 +405,45 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_commandsControl</sender>
+   <signal>clicked()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>commandControl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>386</x>
+     <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chb_vote</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>voteToggle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleBot()</slot>
   <slot>connectVlc()</slot>
   <slot>useSelfChannel()</slot>
   <slot>onLanguageChange(int)</slot>
+  <slot>commandControl()</slot>
+  <slot>voteToggle(bool)</slot>
  </slots>
 </ui>

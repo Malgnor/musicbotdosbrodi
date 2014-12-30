@@ -11,8 +11,8 @@ class SettingsDialog : public QDialog, public Ui::SettingsDialog
 public:
 	SettingsDialog();
 	void SetupUi();
-	void retranslateUi();
 	void translateUi();
+	void retranslateUi();
     ~SettingsDialog();
 
 protected slots:
@@ -22,6 +22,8 @@ protected slots:
 	void toggleBot();
 	void useSelfChannel();
 	void onLanguageChange(int lang);
+	void commandControl();
+	void voteToggle(bool enabled);
 };
 
 #endif // _SETTINGSDIALOG_H

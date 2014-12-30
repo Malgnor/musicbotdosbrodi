@@ -7,9 +7,12 @@
 using namespace std;
 using namespace Global;
 
-MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323), connectedClients(0)
+MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323), connectedClients(0),
+voteEnabled(false), pVoteNeeded(0.5f), commandsEnabled()
 {
 	telnet.inicializar();
+	for (int i = 0; i < 9; i++)
+		commandsEnabled[i] = true;
 }
 
 int MusicBot::processCommand(string command){
@@ -87,7 +90,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 	if (fromChannelID != myChannelID || message[0] != '!')
 		return 0;
 	
-	if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1){
+	if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1 && commandsEnabled[1]){
 		if (!enabled){
 			if (ts3Functions.requestSendPrivateTextMsg(schID, languages[curLanguage].BOT_HELP_WHEN_DISABLED.c_str(), fromID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -119,7 +122,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 		connectedClients = newConnectedClients;
 	}
 
-	if (message.find(languages[curLanguage].USER_COMMAND_YOUTUBE) != -1){
+	if (message.find(languages[curLanguage].USER_COMMAND_YOUTUBE) != -1 && commandsEnabled[0]){
 		if (message.length() <= languages[curLanguage].USER_COMMAND_YOUTUBE.length()+2){
 			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_PARAMETER_MISSING.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -158,7 +161,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 			return 0;
 		}
-	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAYING) != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAYING) != -1 && commandsEnabled[2]){
 		if (!telnet.estaConectado()){
 			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -201,7 +204,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 			}
 		}
 		return 0;
-	} else if (message.find(languages[curLanguage].USER_COMMAND_LENGTH) != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_LENGTH) != -1 && commandsEnabled[3]){
 		if (!telnet.estaConectado()){
 			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -255,8 +258,8 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				return 0;
 			}
 		}
-	} else if (message.find(languages[curLanguage].USER_COMMAND_NEXT) != -1){
-		if (fromID == myID){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_NEXT) != -1 && commandsEnabled[4]){
+		if (fromID == myID || !voteEnabled){
 			telnetSimpleCommand("next\r\n");
 			votesNext.clear();
 			votesPrev.clear();
@@ -268,20 +271,20 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				}
 			}
 			votesNext.push_back(fromID);
-			if (votesNext.size() >= (connectedClients / 2)){
+			if (votesNext.size() >= ceil((float)connectedClients*pVoteNeeded)){
 				telnetSimpleCommand("next\r\n");
 				votesNext.clear();
 				votesPrev.clear();
 			} else {
 				stringstream msg;
-				msg << votesNext.size() << "/" << (connectedClients / 2) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
+				msg << votesNext.size() << "/" << ceil((float)connectedClients*pVoteNeeded) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
 				if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
 					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 				}
 			}
 		}
-	} else if (message.find(languages[curLanguage].USER_COMMAND_PREV) != -1){
-		if (fromID == myID){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PREV) != -1 && commandsEnabled[5]){
+		if (fromID == myID || !voteEnabled){
 			telnetSimpleCommand("prev\r\n");
 			votesNext.clear();
 			votesPrev.clear();
@@ -293,23 +296,23 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 				}
 			}
 			votesPrev.push_back(fromID);
-			if (votesPrev.size() >= (connectedClients / 2)){
+			if (votesPrev.size() >= ceil((float)connectedClients*pVoteNeeded)){
 				telnetSimpleCommand("prev\r\n");
 				votesNext.clear();
 				votesPrev.clear();
 			} else {
 				stringstream msg;
-				msg << votesPrev.size() << "/" << (connectedClients / 2) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
+				msg << votesPrev.size() << "/" << ceil((float)connectedClients*pVoteNeeded) << " " << languages[curLanguage].BOT_NECESSARY_VOTES;
 				if (ts3Functions.requestSendChannelTextMsg(schID, msg.str().c_str(), myChannelID, NULL) != ERROR_ok){
 					ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 				}
 			}
 		}
-	} else if (message.find(languages[curLanguage].USER_COMMAND_PAUSE) != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PAUSE) != -1 && commandsEnabled[6]){
 		telnetSimpleCommand("pause\r\n");
-	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAY) != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_PLAY) != -1 && commandsEnabled[7]){
 		telnetSimpleCommand("play\r\n");
-	} else if (message.find(languages[curLanguage].USER_COMMAND_GOTO) != -1){
+	} else if (message.find(languages[curLanguage].USER_COMMAND_GOTO) != -1 && commandsEnabled[8]){
 		if (!telnet.estaConectado()){
 			if (ts3Functions.requestSendChannelTextMsg(schID, languages[curLanguage].BOT_TELNET_NOT_CONNECTED.c_str(), myChannelID, NULL) != ERROR_ok){
 				ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
@@ -419,14 +422,47 @@ anyID MusicBot::getMyID(){
 }
 
 bool MusicBot::setMyID(){
-	if (schID == 0) return false;
+	if (schID == 0){
+		myID = 0;
+		return false;
+	}
 
 	if (ts3Functions.getClientID(schID, &myID) != ERROR_ok) {
+		myID = 0;
 		ts3Functions.logMessage("Error querying own client id", LogLevel_ERROR, "Plugin", schID);
 		return false;
 	}
 
 	return true;
+}
+
+void MusicBot::setVote(bool vote){
+	voteEnabled = vote;
+}
+
+bool MusicBot::getVote(){
+	return voteEnabled;
+}
+
+void MusicBot::setCommandsEnabled(bool commands[9]){
+	for (int i = 0; i < 9; i++)
+		commandsEnabled[i] = commands[i];
+}
+
+bool* MusicBot::getCommandsEnabled(){
+	return commandsEnabled;
+}
+
+void MusicBot::setPVoteNeeded(float p){
+	pVoteNeeded = p;
+	if (pVoteNeeded >= 1.0f)
+		pVoteNeeded = 1.0f;
+	else if (pVoteNeeded <= 0.0f)
+		pVoteNeeded = 0.0f;
+}
+
+float MusicBot::getPVoteNeeded(){
+	return pVoteNeeded;
 }
 
 bool MusicBot::enable(){
@@ -447,6 +483,9 @@ bool MusicBot::enable(){
 				if (ts3Functions.requestClientMove(schID, myID, myChannelID, "", NULL) != ERROR_ok) {
 					ts3Functions.logMessage("Error moving client", LogLevel_ERROR, "Plugin", schID);
 				} else {
+					string cmd = "start \"\" /b ";
+					cmd += vlcPath;
+					system(cmd.c_str());
 					enabled = true;
 				}
 			}
