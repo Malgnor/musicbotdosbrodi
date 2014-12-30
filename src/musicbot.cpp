@@ -189,7 +189,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 							}
 							b = resposta.substr(l + 1);
 						}
-						if (b == "" || b == " "){
+						if (b == "\r\n"){
 							b = languages[curLanguage].BOT_NOT_PLAYING;
 						}
 						if (ts3Functions.requestSendChannelTextMsg(schID, b.c_str(), myChannelID, NULL) != ERROR_ok){

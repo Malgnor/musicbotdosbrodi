@@ -1,7 +1,13 @@
 /*
-* TeamSpeak 3 musicbot Plugin
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
 *
-* Copyright (c) 2014-2014 Brodi's Dev
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 */
 
 #ifdef _WIN32
@@ -50,7 +56,7 @@ const char* ts3plugin_name() {
 }
 
 const char* ts3plugin_version() {
-    return "0.6.4";
+    return "0.6.5";
 }
 
 int ts3plugin_apiVersion() {
@@ -138,20 +144,12 @@ void ts3plugin_freeMemory(void* data) {
 void ts3plugin_currentServerConnectionChanged(uint64 serverConnectionHandlerID) {
 	printf("PLUGIN: currentServerConnectionChanged %llu (%llu)\n", (long long unsigned int)serverConnectionHandlerID, (long long unsigned int)ts3Functions.getCurrentServerConnectionHandlerID());
 	musicbot.setSchID(serverConnectionHandlerID);
-	stringstream a;
-	a << "oldServerConnectionHandlerID: " << serverConnectionHandlerID << endl;
-	a << "newServerConnectionHandlerID: " << ts3Functions.getCurrentServerConnectionHandlerID() << endl;
-	ts3Functions.printMessageToCurrentTab(a.str().c_str());
 }
 
 void ts3plugin_onConnectStatusChangeEvent(uint64 serverConnectionHandlerID, int newStatus, unsigned int errorNumber) {
 	switch (newStatus) {
 	case STATUS_DISCONNECTED: {
 		musicbot.setSchID(0);
-		stringstream a;
-		a << "oldServerConnectionHandlerID: " << serverConnectionHandlerID << endl;
-		a << "newServerConnectionHandlerID: " << ts3Functions.getCurrentServerConnectionHandlerID() << endl;
-		ts3Functions.printMessageToCurrentTab(a.str().c_str());
 		break;
 	}
 	case STATUS_CONNECTION_ESTABLISHED:

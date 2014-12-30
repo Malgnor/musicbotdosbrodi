@@ -51,9 +51,10 @@ void SettingsDialog::SetupUi(){
 			return;
 		}
 		cb_channelList->insertItem(i, nomeCanal);
-		delete[] nomeCanal;
+		ts3Functions.freeMemory(nomeCanal);
 		i++;
 	}
+	ts3Functions.freeMemory(canais);
 	cb_channelList->setCurrentIndex(0);
 	cb_channelList->setCurrentText(cfg.value("channelName", cb_channelList->currentText()).toString());
 
