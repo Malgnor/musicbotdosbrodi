@@ -26,6 +26,9 @@
     <ClInclude Include="langs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="commandsdialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -47,6 +50,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="langs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="commandsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_commandsdialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

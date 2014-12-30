@@ -8,11 +8,12 @@ using namespace std;
 using namespace Global;
 
 MusicBot::MusicBot() : enabled(false), vlcPath(""), myID(0), myChannelID(1), schID(0), rcHost("127.0.0.1"), rcPort(32323), connectedClients(0),
-voteEnabled(false), pVoteNeeded(0.5f), commandsEnabled()
+voteEnabled(false), pVoteNeeded(0.5f)
 {
 	telnet.inicializar();
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 9; i++){
 		commandsEnabled[i] = true;
+	}
 }
 
 int MusicBot::processCommand(string command){
@@ -188,7 +189,9 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 							}
 							b = resposta.substr(l + 1);
 						}
-
+						if (b == "" || b == " "){
+							b = languages[curLanguage].BOT_NOT_PLAYING;
+						}
 						if (ts3Functions.requestSendChannelTextMsg(schID, b.c_str(), myChannelID, NULL) != ERROR_ok){
 							ts3Functions.logMessage("Error requesting send text message", LogLevel_ERROR, "Plugin", schID);
 						}
@@ -483,13 +486,15 @@ bool MusicBot::enable(){
 				if (ts3Functions.requestClientMove(schID, myID, myChannelID, "", NULL) != ERROR_ok) {
 					ts3Functions.logMessage("Error moving client", LogLevel_ERROR, "Plugin", schID);
 				} else {
-					string cmd = "start \"\" /b ";
-					cmd += vlcPath;
-					system(cmd.c_str());
 					enabled = true;
 				}
 			}
 		}
+	}
+	if (enabled){
+		string cmd = "start \"\" /b ";
+		cmd += vlcPath;
+		system(cmd.c_str());
 	}
 
 	return enabled == true;

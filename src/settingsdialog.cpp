@@ -1,8 +1,7 @@
 #include "settingsdialog.h"
 #include <QtCore\qsettings.h>
 #include <QtWidgets\qmessagebox.h>
-#include <QtWidgets\qabstractbutton.h>
-#include <QtGui\qevent.h>
+#include "commandsdialog.h"
 #include "global.h"
 
 using namespace Global;
@@ -69,7 +68,7 @@ void SettingsDialog::SetupUi(){
 
 void SettingsDialog::translateUi()
 {
-	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
+	this->setWindowTitle(languages[curLanguage].GUI_TITLE_SETTINGS.c_str());
 	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
 	le_vlcPath->setText("\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --extraintf rc --rc-host 127.0.0.1:32323");
 	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
@@ -98,7 +97,7 @@ void SettingsDialog::translateUi()
 
 void SettingsDialog::retranslateUi()
 {
-	this->setWindowTitle(languages[curLanguage].GUI_WINDOWTITLE.c_str());
+	this->setWindowTitle(languages[curLanguage].GUI_TITLE_SETTINGS.c_str());
 	label_vlcPath->setText(languages[curLanguage].GUI_LABEL_VLC_EXE_PATH.c_str());
 	label_channel->setText(languages[curLanguage].GUI_LABEL_MUSIC_CHANNEL.c_str());
 	pb_selfChannel->setText(languages[curLanguage].GUI_BUTTON_USE_CURRENT_CHANNEL.c_str());
@@ -225,12 +224,13 @@ void SettingsDialog::toggleBot(){
 				std::string nome = nomeCanal;
 				if (nome == cb_channelList->currentText().toStdString()){
 					musicbot.setChannelID(canais[i]);
-					delete[] nomeCanal;
+					ts3Functions.freeMemory(nomeCanal);
 					break;
 				}
-				delete[] nomeCanal;
+				ts3Functions.freeMemory(nomeCanal);
 				i++;
 			}
+			ts3Functions.freeMemory(canais);
 		}
 		if (musicbot.enable()){
 			msgBox.setText(languages[curLanguage].BOT_ACTIVATED_SUCESS.c_str());
@@ -248,7 +248,9 @@ void SettingsDialog::onLanguageChange(int lang){
 }
 
 void SettingsDialog::commandControl(){
-
+	CommandsDialog dlg;
+	dlg.SetupUi();
+	dlg.exec();
 }
 
 void SettingsDialog::voteToggle(bool enabled){

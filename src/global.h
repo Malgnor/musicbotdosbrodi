@@ -49,10 +49,11 @@ struct Localization {
 	std::string BOT_AND;
 	std::string BOT_ERROR;
 	std::string BOT_NECESSARY_VOTES;
+	std::string BOT_NOT_PLAYING;
 
 	/* SETTINGS GUI*/
 
-	std::string GUI_WINDOWTITLE;
+	std::string GUI_TITLE_SETTINGS;
 	std::string GUI_LABEL_VLC_EXE_PATH;
 	std::string GUI_LABEL_MUSIC_CHANNEL;
 	std::string GUI_BUTTON_USE_CURRENT_CHANNEL;
@@ -65,6 +66,7 @@ struct Localization {
 	std::string GUI_CHB_COMMAND_BY_VOTES;
 	std::string GUI_PREFFIX_NECESSARY_VOTES;
 	std::string GUI_BUTTON_ENABLE_DISABLE_COMMANDS;
+	std::string GUI_TITLE_COMMANDS;
 };
 
 namespace Global
@@ -82,6 +84,5 @@ namespace Global
 	void generateLocaleStrings();
 
 }
-
 
 #endif

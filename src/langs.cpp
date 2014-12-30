@@ -30,7 +30,7 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].USER_COMMAND_NEXT = "!proximo";
 	languages[LANG_PT_BR].USER_COMMAND_PREV = "!anterior";
 	languages[LANG_PT_BR].USER_COMMAND_PAUSE = "!pausar";
-	languages[LANG_PT_BR].USER_COMMAND_PLAY = "!play";
+	languages[LANG_PT_BR].USER_COMMAND_PLAY = "!tocar";
 	languages[LANG_PT_BR].USER_COMMAND_GOTO = "!irpara";
 
 	/* INFOS */
@@ -46,7 +46,7 @@ void generatePTBRStrings(){
 												!proximo - Pula para a proxima m\303\272sica\n\
 												!anterior - Pula para a m\303\272sica anterior\n\
 												!pausar - Pausa/despausa m\303\272sica atual\n\
-												!play - Toca m\303\272sica atual\n\
+												!tocar - Toca m\303\272sica atual\n\
 												!irpara xx - Vai para o momento xx segundos da m\303\272sica\n\
 												!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n\
 												!ajuda - Mostra essa mensagem\n";
@@ -60,10 +60,11 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].BOT_AND = "e";
 	languages[LANG_PT_BR].BOT_ERROR = "ERRO!";
 	languages[LANG_PT_BR].BOT_NECESSARY_VOTES = "votos necess\303\241rios";
+	languages[LANG_PT_BR].BOT_NOT_PLAYING = "Digite !play ou a playlist est\303\241 vazia.";
 
 	/* SETTINGS GUI*/
 
-	languages[LANG_PT_BR].GUI_WINDOWTITLE = "Configura\303\247\303\265es";
+	languages[LANG_PT_BR].GUI_TITLE_SETTINGS = "Configura\303\247\303\265es";
 	languages[LANG_PT_BR].GUI_LABEL_VLC_EXE_PATH = "Caminho do execut\303\241vel do VLC:";
 	languages[LANG_PT_BR].GUI_LABEL_MUSIC_CHANNEL = "Canal de m\303\272sica";
 	languages[LANG_PT_BR].GUI_BUTTON_USE_CURRENT_CHANNEL = "Usar canal atual";
@@ -134,10 +135,11 @@ void generateENUSStrings(){
 	languages[LANG_EN_US].BOT_AND = "and";
 	languages[LANG_EN_US].BOT_ERROR = "ERROR!";
 	languages[LANG_EN_US].BOT_NECESSARY_VOTES = "necessary votes";
+	languages[LANG_EN_US].BOT_NOT_PLAYING = "Type !play or the playlist is empty.";
 
 	/* SETTINGS GUI*/
 
-	languages[LANG_EN_US].GUI_WINDOWTITLE = "Settings";
+	languages[LANG_EN_US].GUI_TITLE_SETTINGS = "Settings";
 	languages[LANG_EN_US].GUI_LABEL_VLC_EXE_PATH = "VLC exe path:";
 	languages[LANG_EN_US].GUI_LABEL_MUSIC_CHANNEL = "Music channel";
 	languages[LANG_EN_US].GUI_BUTTON_USE_CURRENT_CHANNEL = "Use current channel";
