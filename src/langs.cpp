@@ -49,18 +49,18 @@ void generatePTBRStrings(){
 												!tocar - Toca m\303\272sica atual\n\
 												!irpara xx - Vai para o momento xx segundos da m\303\272sica\n\
 												!irpara x:y - Vai para o momento x minutos e y segundos da m\303\272sica\n\
-												!ajuda - Mostra essa mensagem\n";
+												!ajuda - Mostra essa mensagem";
 	languages[LANG_PT_BR].BOT_HELP_WHEN_DISABLED = "Bem-Vindo ao meu canal de m\303\272sica!\n\
 												   Atualmente estou desativado.\n\
 												   Entre em contato com algum admin para mais info.";
 	languages[LANG_PT_BR].BOT_TELNET_NOT_CONNECTED = "Telnet n\303\243o est\303\241 conectado.";
 	languages[LANG_PT_BR].BOT_TRY_AGAIN = "Tente novamente!";
-	languages[LANG_PT_BR].BOT_MINUTES = "minutos";
-	languages[LANG_PT_BR].BOT_SECONDS = "segundos";
+	languages[LANG_PT_BR].BOT_MINUTES = "minuto(s)";
+	languages[LANG_PT_BR].BOT_SECONDS = "segundo(s)";
 	languages[LANG_PT_BR].BOT_AND = "e";
 	languages[LANG_PT_BR].BOT_ERROR = "ERRO!";
 	languages[LANG_PT_BR].BOT_NECESSARY_VOTES = "votos necess\303\241rios";
-	languages[LANG_PT_BR].BOT_NOT_PLAYING = "Digite !play ou a playlist est\303\241 vazia.";
+	languages[LANG_PT_BR].BOT_NOT_PLAYING = "Digite !tocar ou a playlist est\303\241 vazia.";
 
 	/* SETTINGS GUI*/
 
@@ -126,13 +126,13 @@ void generateENUSStrings(){
 												!play - play the current song\n\
 												!goto xx - go to the moment xx seconds of what\'s currently playing\n\
 												!goto x:y - go to the moment x minutes and y seconds of what\'s currently playing\n\
-												!help - show this message\n";
+												!help - show this message";
 	languages[LANG_EN_US].BOT_HELP_WHEN_DISABLED = "Welcome to my music channel!\n\
-												   Currently i\'m not active.\n";
+												   Currently i\'m not active.";
 	languages[LANG_EN_US].BOT_TELNET_NOT_CONNECTED = "Telnet not connected!";
 	languages[LANG_EN_US].BOT_TRY_AGAIN = "Try again!";
-	languages[LANG_EN_US].BOT_MINUTES = "minutes";
-	languages[LANG_EN_US].BOT_SECONDS = "seconds";
+	languages[LANG_EN_US].BOT_MINUTES = "minute(s)";
+	languages[LANG_EN_US].BOT_SECONDS = "second(s)";
 	languages[LANG_EN_US].BOT_AND = "and";
 	languages[LANG_EN_US].BOT_ERROR = "ERROR!";
 	languages[LANG_EN_US].BOT_NECESSARY_VOTES = "necessary votes";

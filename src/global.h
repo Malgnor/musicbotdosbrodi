@@ -5,6 +5,12 @@
 #include "musicbot.h"
 #include "ts3_functions.h"
 
+#define PLUGIN_API_VERSION 20
+#define PLUGIN_NAME "Musicbot dos Brodi"
+#define PLUGIN_VERSION "0.7"
+#define PLUGIN_AUTHOR "Brodi\'s Dev"
+#define PLUGIN_DESCRIPTION "This is a musicbot plugin, it has commands to add music from youtube to playlist, change music, pause and many other functions."
+
 struct Localization {
 
 	/* COMMANDS / */

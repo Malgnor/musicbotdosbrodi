@@ -40,8 +40,6 @@ using namespace Global;
 #define _strcpy(dest, destSize, src) { strncpy(dest, src, destSize-1); (dest)[destSize-1] = '\0'; }
 #endif
 
-#define PLUGIN_API_VERSION 20
-
 #define PATH_BUFSIZE 512
 #define COMMAND_BUFSIZE 128
 #define INFODATA_BUFSIZE 128
@@ -52,11 +50,11 @@ using namespace Global;
 static char* pluginID = NULL;
 
 const char* ts3plugin_name() {
-	return "Musicbot dos Brodi";
+	return PLUGIN_NAME;
 }
 
 const char* ts3plugin_version() {
-    return "0.7";
+    return PLUGIN_VERSION;
 }
 
 int ts3plugin_apiVersion() {
@@ -64,11 +62,11 @@ int ts3plugin_apiVersion() {
 }
 
 const char* ts3plugin_author() {
-    return "Brodi\'s Dev";
+    return PLUGIN_AUTHOR;
 }
 
 const char* ts3plugin_description() {
-    return "This is a musicbot plugin, it has commands to add music from youtube to playlist, change music, pause and many other functions.";
+    return PLUGIN_DESCRIPTION;
 }
 
 void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
@@ -78,11 +76,11 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 int ts3plugin_init() {
     printf("PLUGIN: init\n");
 
-	/*
+	
 	if (!musicbot.startThread()){
 		return 1;
 	}
-	*/
+	
 
 	generateLocaleStrings();
 
@@ -90,7 +88,6 @@ int ts3plugin_init() {
 	if (serverConnectionHandlerID != 0) {
 		musicbot.setSchID(serverConnectionHandlerID);
 	}
-
 	loadSettings();
 
     return 0;  /* 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning */
@@ -103,9 +100,9 @@ void ts3plugin_shutdown() {
 
     printf("PLUGIN: shutdown\n");
 
-	/*
+	
 	musicbot.requestEndThread();
-	*/
+	
 
 	if(pluginID) {
 		free(pluginID);

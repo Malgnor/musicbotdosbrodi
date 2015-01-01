@@ -9,6 +9,7 @@
 #include "public_rare_definitions.h"
 #include "ts3_functions.h"
 #include "telnet.h"
+
 class MusicBot
 {
 private:
@@ -29,13 +30,13 @@ private:
 	bool voteEnabled;
 	float pVoteNeeded;
 
-	/*
+	enum {TN_NONE = 0, TN_GET_TITLE, TN_GET_LENGTH, TN_GET_TIME} waitingFor;
 	HANDLE thread;
 	bool endThread;
 	static MusicBot* mb;
 
 	static DWORD WINAPI telnetThread(LPVOID lpParam);
-	*/
+	
 
 public:
 	MusicBot();
@@ -74,12 +75,12 @@ public:
 	bool isEnabled();
 	bool isConnected();
 
-	int telnetSimpleCommand(std::string cmd);
+	bool telnetSimpleCommand(std::string cmd);
 	
-	/*
+	
 	bool startThread();
 	void requestEndThread();
-	*/
+	
 
 	~MusicBot();
 };
