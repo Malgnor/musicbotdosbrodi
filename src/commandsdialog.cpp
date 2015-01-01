@@ -14,7 +14,7 @@ void CommandsDialog::SetupUi(){
 	translateUi();
 	QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
 	cfg.beginReadArray("commandsEnabled");
-	for (int i = 0; i < 9; i++){
+	for (int i = 0; i < COMMANDS_QTD; i++){
 		cfg.setArrayIndex(i);
 		chb_commands[i]->setChecked(cfg.value("cmd", true).toBool());
 	}
@@ -33,14 +33,15 @@ void CommandsDialog::translateUi(){
 	chb_commands[6]->setText(languages[curLanguage].USER_COMMAND_PAUSE.c_str());
 	chb_commands[7]->setText(languages[curLanguage].USER_COMMAND_PLAY.c_str());
 	chb_commands[8]->setText(languages[curLanguage].USER_COMMAND_GOTO.c_str());
+	chb_commands[9]->setText(languages[curLanguage].USER_COMMAND_TIME.c_str());
 }
 
 void CommandsDialog::accept(){
 
 	QSettings cfg(QString::fromStdString(getConfigFilePath()), QSettings::IniFormat);
-	bool cmds[9];
+	bool cmds[COMMANDS_QTD];
 	cfg.beginWriteArray("commandsEnabled");
-	for (int i = 0; i < 9; i++){
+	for (int i = 0; i < COMMANDS_QTD; i++){
 		cfg.setArrayIndex(i);
 		cmds[i] = chb_commands[i]->isChecked();
 		cfg.setValue("cmd", cmds[i]);

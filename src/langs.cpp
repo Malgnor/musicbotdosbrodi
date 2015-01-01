@@ -32,6 +32,7 @@ void generatePTBRStrings(){
 	languages[LANG_PT_BR].USER_COMMAND_PAUSE = "!pausar";
 	languages[LANG_PT_BR].USER_COMMAND_PLAY = "!tocar";
 	languages[LANG_PT_BR].USER_COMMAND_GOTO = "!irpara";
+	languages[LANG_PT_BR].USER_COMMAND_TIME = "!tempo";
 
 	/* INFOS */
 
@@ -43,6 +44,7 @@ void generatePTBRStrings(){
 												!youtube link - Coloca o link na playlist\n\
 												!tocando - Mostra a m\303\272sica atual\n\
 												!duracao - Mostra duracao da m\303\272sica atual\n\
+												!tempo - Mostra tempo atual da m\303\272sica\n\
 												!proximo - Pula para a proxima m\303\272sica\n\
 												!anterior - Pula para a m\303\272sica anterior\n\
 												!pausar - Pausa/despausa m\303\272sica atual\n\
@@ -109,6 +111,7 @@ void generateENUSStrings(){
 	languages[LANG_EN_US].USER_COMMAND_PAUSE = "!pause";
 	languages[LANG_EN_US].USER_COMMAND_PLAY = "!play";
 	languages[LANG_EN_US].USER_COMMAND_GOTO = "!goto";
+	languages[LANG_EN_US].USER_COMMAND_TIME = "!time";
 
 	/* INFOS */
 
@@ -120,6 +123,7 @@ void generateENUSStrings(){
 												!youtube link - Insert the link in the playlist\n\
 												!playing - show the title what\'s currently playing\n\
 												!length - show the length of what\'s currently playing\n\
+												!time - show the current time of the music\n\
 												!next - skip to next music\n\
 												!prev - skip to previous music\n\
 												!pause - pause/unpause what's currently playing\n\

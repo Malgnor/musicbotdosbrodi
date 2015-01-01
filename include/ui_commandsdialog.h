@@ -39,7 +39,7 @@ public:
 	QWidget *horizontalLayoutWidget_6;
 	QHBoxLayout *horizontalLayout_6;
 	QDialogButtonBox *buttonBox;
-	QCheckBox* chb_commands[9];	
+	QCheckBox* chb_commands[10];	
 
 	void setupUi(QDialog *CommandsDialog)
 	{
@@ -165,6 +165,14 @@ public:
 
 		chb_commands[i] = new QCheckBox(horizontalLayoutWidget_5);
 		chb_commands[i]->setObjectName(QStringLiteral("chb_commands8"));
+		chb_commands[i]->setChecked(false);
+		chb_commands[i]->setTristate(false);
+
+		horizontalLayout_5->addWidget(chb_commands[i]);
+		i++;
+
+		chb_commands[i] = new QCheckBox(horizontalLayoutWidget_5);
+		chb_commands[i]->setObjectName(QStringLiteral("chb_commands9"));
 		chb_commands[i]->setChecked(false);
 		chb_commands[i]->setTristate(false);
 

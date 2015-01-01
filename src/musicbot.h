@@ -26,7 +26,7 @@ private:
 	std::vector<anyID> votesPrev;
 	int connectedClients;
 
-	bool commandsEnabled[9];
+	bool commandsEnabled[10];
 	bool voteEnabled;
 	float pVoteNeeded;
 
@@ -62,7 +62,7 @@ public:
 	void setVote(bool vote);
 	bool getVote();
 
-	void setCommandsEnabled(bool commands[9]);
+	void setCommandsEnabled(bool commands[10]);
 	bool* getCommandsEnabled();
 
 	void setPVoteNeeded(float p);

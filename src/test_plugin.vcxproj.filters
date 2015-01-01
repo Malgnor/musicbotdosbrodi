@@ -26,9 +26,6 @@
     <ClInclude Include="langs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commandsdialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -60,10 +57,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="settingsdialog.ui" />
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="settingsdialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="commandsdialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

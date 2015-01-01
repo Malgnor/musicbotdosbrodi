@@ -7,9 +7,11 @@
 
 #define PLUGIN_API_VERSION 20
 #define PLUGIN_NAME "Musicbot dos Brodi"
-#define PLUGIN_VERSION "0.7"
+#define PLUGIN_VERSION "0.7.1"
 #define PLUGIN_AUTHOR "Brodi\'s Dev"
 #define PLUGIN_DESCRIPTION "This is a musicbot plugin, it has commands to add music from youtube to playlist, change music, pause and many other functions."
+
+#define COMMANDS_QTD 10
 
 struct Localization {
 
@@ -40,6 +42,7 @@ struct Localization {
 	std::string USER_COMMAND_PAUSE;		// 6
 	std::string USER_COMMAND_PLAY;		// 7
 	std::string USER_COMMAND_GOTO;		// 8
+	std::string USER_COMMAND_TIME;		// 9
 
 	/* INFOS */
 

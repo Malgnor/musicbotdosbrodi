@@ -35,9 +35,9 @@ namespace Global
 		musicbot.setVote(cfg.value("voteEnabled", false).toBool());
 		musicbot.setPVoteNeeded(cfg.value("pVoteNeeded", 0.5f).toFloat());
 
-		bool cmds[9];
+		bool cmds[COMMANDS_QTD];
 		cfg.beginReadArray("commandsEnabled");
-		for (int j = 0; j < 9; j++){
+		for (int j = 0; j < COMMANDS_QTD; j++){
 			cfg.setArrayIndex(j);
 			cmds[j] = cfg.value("cmd", true).toBool();
 		}

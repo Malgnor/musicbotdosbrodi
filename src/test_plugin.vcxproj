@@ -220,9 +220,6 @@
     <ClInclude Include="musicbot.h" />
     <ClInclude Include="plugin.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="settingsdialog.ui" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

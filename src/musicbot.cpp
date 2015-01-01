@@ -14,7 +14,7 @@ voteEnabled(false), pVoteNeeded(0.5f), endThread(false), thread(0), waitingFor(T
 {
 	mb = this;
 	telnet.inicializar();
-	for (int i = 0; i < 9; i++){
+	for (int i = 0; i < COMMANDS_QTD; i++){
 		commandsEnabled[i] = true;
 	}
 }
@@ -91,7 +91,7 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 		return 0;
 	}
 
-	if (fromChannelID != myChannelID)
+	if (fromChannelID != myChannelID || message[0] != '!')
 		return 0;
 	
 	if (message.find(languages[curLanguage].USER_COMMAND_HELP) != -1 && commandsEnabled[1]){
@@ -259,6 +259,10 @@ int MusicBot::onTextMessage(anyID fromID, string message){
 		}
 		msg += "\r\n";
 		telnetSimpleCommand(msg);
+	} else if (message.find(languages[curLanguage].USER_COMMAND_TIME) != -1 && commandsEnabled[9] && waitingFor == TN_NONE){
+		if (telnetSimpleCommand("get_time\r\n")){
+			waitingFor = TN_GET_TIME;
+		}
 	}
 
 	return 0;
@@ -344,8 +348,8 @@ bool MusicBot::getVote(){
 	return voteEnabled;
 }
 
-void MusicBot::setCommandsEnabled(bool commands[9]){
-	for (int i = 0; i < 9; i++)
+void MusicBot::setCommandsEnabled(bool commands[COMMANDS_QTD]){
+	for (int i = 0; i < COMMANDS_QTD; i++)
 		commandsEnabled[i] = commands[i];
 }
 
