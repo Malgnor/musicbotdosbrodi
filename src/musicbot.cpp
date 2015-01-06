@@ -551,7 +551,6 @@ void MusicBot::requestEndThread(){
 	}
 }
 
-
 MusicBot::~MusicBot(){
 	mb = 0;
 }

@@ -36,7 +36,6 @@ private:
 	static MusicBot* mb;
 
 	static DWORD WINAPI telnetThread(LPVOID lpParam);
-	
 
 public:
 	MusicBot();
@@ -77,10 +76,8 @@ public:
 
 	bool telnetSimpleCommand(std::string cmd);
 	
-	
 	bool startThread();
 	void requestEndThread();
-	
 
 	~MusicBot();
 };
